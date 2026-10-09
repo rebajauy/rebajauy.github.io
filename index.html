@@ -3,8 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Descuentos vigentes en Uruguay por comercio, banco, día y departamento.">
+<meta name="description" content="Todos los descuentos de bancos, tarjetas y comercios de Uruguay, día por día y por departamento. Gratis.">
 <meta name="theme-color" content="#1a1530">
+<link rel="canonical" href="https://rebajauy.github.io/">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Rebaja.uy">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Rebaja.uy">
+<meta property="og:title" content="Rebaja.uy · Descuentos de hoy en Uruguay">
+<meta property="og:description" content="Descuentos de bancos, tarjetas y comercios, día por día y en los 19 departamentos. Gratis.">
+<meta property="og:url" content="https://rebajauy.github.io/">
+<meta property="og:image" content="https://rebajauy.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="es_UY">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rebaja.uy · Descuentos de hoy en Uruguay">
+<meta name="twitter:description" content="Descuentos de bancos, tarjetas y comercios, día por día y en los 19 departamentos.">
+<meta name="twitter:image" content="https://rebajauy.github.io/og.png">
 <title>Rebaja Uruguay</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
@@ -93,6 +114,7 @@ h1 em{font-style:normal;color:var(--sun)}
 .tag.chk{color:var(--warn);background:transparent;border:1.5px solid currentColor}
 .tag.zone{background:var(--ink);color:var(--bg)}
 .tag.mine{background:var(--hot);color:#fff}
+.tag.exp{background:var(--hot);color:#fff}
 .mono{flex:none;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.68rem;letter-spacing:-.02em;background:var(--c);color:var(--ci)}
 .mono.lg{width:52px;height:52px;border-radius:16px;font-size:.95rem}
 .mono.sm{width:20px;height:20px;border-radius:6px;font-size:.5rem}
@@ -273,6 +295,15 @@ const COMS={
  "Estaciones de frontera":{cat:"Combustible",url:"https://www.gub.uy/ministerio-economia-finanzas/politicas-y-gestion/reduccion-del-imesi-naftas"},
  "Tarjeta Joven":{cat:"Educación y librerías",url:"https://www.gub.uy/ministerio-desarrollo-social/tarjetajoven/beneficios"},
  "Comercios del interior (BROU)":{cat:"Supermercados",url:"https://beneficios.brou.com.uy/hogar/beneficiosparavos"},
+ "Prune":{alc:"locales",cat:"Indumentaria",url:"https://www.prune.com.uy"},
+ "TOTO":{alc:"locales",cat:"Indumentaria",url:"https://beneficios.brou.com.uy/moda/toto"},
+ "Skechers":{alc:"locales",cat:"Indumentaria",url:"https://beneficios.brou.com.uy/moda/skechers"},
+ "Guapa!":{alc:"locales",cat:"Indumentaria",url:"https://beneficios.brou.com.uy/moda/guapa"},
+ "Comercios de moda adheridos (Itaú)":{cat:"Indumentaria",url:"https://www.itau.com.uy/inst/moda.html"},
+ "Mango":{alc:"locales",cat:"Indumentaria",url:"https://www.santander.com.uy/beneficios/mango"},
+ "Columbia":{alc:"locales",cat:"Indumentaria",url:"https://www.santander.com.uy/beneficios/columbia"},
+ "Mónaco Calzados":{alc:"locales",cat:"Indumentaria",url:"https://www.santander.com.uy/beneficios/monaco-calzados"},
+ "Desigual":{alc:"locales",cat:"Indumentaria",url:"https://www.santander.com.uy/beneficios/desigual"},
  "Cualquier comercio":{cat:"Puntos y cashback",url:""}
 };
 
@@ -284,15 +315,15 @@ let BASE=[
  {id:"ti9",com:"Tienda Inglesa",tit:"Tienda Días martes: 30% en frutas y verduras",ent:"Promo del comercio (Tienda Días)",tipo:"Promo del comercio",cat:"Supermercados",pct:30,medio:"Cualquier medio de pago",dias:[2],verif:true,src:"prensa feb 2026 (cronicas.com.uy, qm.com.uy)",cond:"No incluye congeladas, cubos de fruta, ensalada de frutas, jugos de máquina o de elaboración propia ni frutos secos. Sucursales, web y app. Dato de prensa de febrero de 2026: confirmá en la web.",url:"https://www.tiendainglesa.com.uy"},
  {id:"ti10",com:"Tienda Inglesa",tit:"Tienda Días miércoles: 30% en pescados, mariscos y pastas frescas",ent:"Promo del comercio (Tienda Días)",tipo:"Promo del comercio",cat:"Supermercados",pct:30,medio:"Cualquier medio de pago",dias:[3],verif:true,src:"prensa feb 2026 (cronicas.com.uy, qm.com.uy)",cond:"Pescado fresco, mariscos congelados y pastas frescas. No incluye pastas al vacío ni de rotisería. Sucursales, web y app. Dato de prensa de febrero de 2026: confirmá en la web.",url:"https://www.tiendainglesa.com.uy"},
  {id:"ti11",com:"Tienda Inglesa",tit:"Tienda Días viernes: 30% en pizzas y empanadas de rotisería",ent:"Promo del comercio (Tienda Días)",tipo:"Promo del comercio",cat:"Supermercados",pct:30,medio:"Cualquier medio de pago",dias:[5],verif:true,src:"prensa feb 2026 (cronicas.com.uy, qm.com.uy)",cond:"No incluye congelados. Sucursales, web y app. Dato de prensa de febrero de 2026: confirmá en la web.",url:"https://www.tiendainglesa.com.uy"},
- {id:"ti5",com:"Tienda Inglesa",tit:"20% con tarjetas BBVA",ent:"BBVA crédito y débito",tipo:"Tarjeta / banco",cat:"Supermercados",pct:20,medio:"BBVA",dias:[],verif:true,src:"web BBVA, oct 2026 (vigente al 15/6/2027)",cond:"Clientes seleccionados, presentando cédula (en la web, con la cédula asociada al usuario). Tope $2.000 por cédula por mes. Excluye electrónica, electrodomésticos, cigarros, Tienda Deli, Barny's, productos de mailings y catálogos especiales, prepagas y tarjeta Fija. No acumulable.",url:"https://www.bbva.com.uy/personas/campanas/promocion-tienda-inglesa.html"},
- {id:"ti1",com:"Tienda Inglesa",tit:"10% de lunes a viernes con Scotiabank (Save the week)",ent:"Scotiabank Club Card",tipo:"Tarjeta / banco",cat:"Supermercados",pct:10,medio:"Scotiabank",dias:[1,2,3,4,5],verif:true,src:"montevideo.com.uy feb 2026 + bases Tienda Inglesa ago–dic 2026",cond:"Visa Infinite, Visa Platinum, Amex Gold y Débito Premium Club Card. Solo en sucursales, en caja; no web ni app. No incluye tecnología ni electrodomésticos. No acumulable. Según las bases generales de descuentos Scotia (3/8 al 31/12/2026): tope mensual $6.000 por tarjeta preferencial, hay que estar adherido a PUNTOS, y no aplica en Tiendas Smart, Tienda Farma ni Barny's.",url:"https://www.tiendainglesa.com.uy/supermercado/landing/descuentos-scotia/731"},
- {id:"ti6",com:"Tienda Inglesa",tit:"10% martes y jueves con BROU Recompensa",ent:"BROU Recompensa Mastercard crédito",tipo:"Tarjeta / banco",cat:"Supermercados",pct:10,medio:"BROU",dias:[2,4],verif:true,src:"web BROU, oct 2026 (vigente al 30/4/2027)",cond:"Tope $2.000 por mes por cuenta (compartido entre los supermercados adheridos). También BROU PYME Mastercard. Vale en caja y en la web del comercio, no pagando con Mercado Pago. Reintegro en el estado de cuenta. No aplica a corporativas.",url:"https://beneficios.brou.com.uy/medios_de_pago/credito/hogar/tienda-inglesa"},
+ {id:"ti5",hasta:"2027-06-15",com:"Tienda Inglesa",tit:"20% con tarjetas BBVA",ent:"BBVA crédito y débito",tipo:"Tarjeta / banco",cat:"Supermercados",pct:20,medio:"BBVA",dias:[],verif:true,src:"web BBVA, oct 2026 (vigente al 15/6/2027)",cond:"Clientes seleccionados, presentando cédula (en la web, con la cédula asociada al usuario). Tope $2.000 por cédula por mes. Excluye electrónica, electrodomésticos, cigarros, Tienda Deli, Barny's, productos de mailings y catálogos especiales, prepagas y tarjeta Fija. No acumulable.",url:"https://www.bbva.com.uy/personas/campanas/promocion-tienda-inglesa.html"},
+ {id:"ti1",hasta:"2026-12-31",com:"Tienda Inglesa",tit:"10% de lunes a viernes con Scotiabank (Save the week)",ent:"Scotiabank Club Card",tipo:"Tarjeta / banco",cat:"Supermercados",pct:10,medio:"Scotiabank",dias:[1,2,3,4,5],verif:true,src:"montevideo.com.uy feb 2026 + bases Tienda Inglesa ago–dic 2026",cond:"Visa Infinite, Visa Platinum, Amex Gold y Débito Premium Club Card. Solo en sucursales, en caja; no web ni app. No incluye tecnología ni electrodomésticos. No acumulable. Según las bases generales de descuentos Scotia (3/8 al 31/12/2026): tope mensual $6.000 por tarjeta preferencial, hay que estar adherido a PUNTOS, y no aplica en Tiendas Smart, Tienda Farma ni Barny's.",url:"https://www.tiendainglesa.com.uy/supermercado/landing/descuentos-scotia/731"},
+ {id:"ti6",hasta:"2027-04-30",com:"Tienda Inglesa",tit:"10% martes y jueves con BROU Recompensa",ent:"BROU Recompensa Mastercard crédito",tipo:"Tarjeta / banco",cat:"Supermercados",pct:10,medio:"BROU",dias:[2,4],verif:true,src:"web BROU, oct 2026 (vigente al 30/4/2027)",cond:"Tope $2.000 por mes por cuenta (compartido entre los supermercados adheridos). También BROU PYME Mastercard. Vale en caja y en la web del comercio, no pagando con Mercado Pago. Reintegro en el estado de cuenta. No aplica a corporativas.",url:"https://beneficios.brou.com.uy/medios_de_pago/credito/hogar/tienda-inglesa"},
  {id:"ti3",com:"Tienda Inglesa",tit:"Hasta 18 cuotas sin recargo con Club Card Crédito",ent:"Scotiabank Club Card",tipo:"Tarjeta / banco",cat:"Hogar y tecnología",pct:null,medio:"Scotiabank",dias:[],verif:false,cond:"Se ofreció en productos seleccionados, en dólares, durante la mega liquidación de julio de 2026 (ya terminada) y figura en la página de Ciberlunes de Tienda Inglesa. Rige en eventos puntuales: confirmá antes de comprar.",url:"https://www.tiendainglesa.com.uy"},
  {id:"ti4",com:"Tienda Inglesa",tit:"Especiales temáticos (Parrilla y Vinos, Vuelta a clases)",ent:"Promo del comercio",tipo:"Promo del comercio",cat:"Supermercados",pct:null,medio:"Cualquier medio de pago",dias:[],verif:false,cond:"Campañas por temporada con precios rebajados en rubros específicos. Ver folleto vigente.",url:"https://www.tiendainglesa.com.uy"},
  // Ta-Ta
  {id:"tt1",com:"Ta-Ta",tit:"10% todos los miércoles con Comunidad Plus",ent:"Tarjeta Comunidad Plus (BBVA Visa)",tipo:"Tarjeta / banco",cat:"Supermercados",pct:10,medio:"BBVA",dias:[3],verif:true,src:"web BBVA, oct 2026",cond:"También 10% los miércoles en Multi Ahorro Hogar (y 25% en BAS). BBVA indica que la oferta vale para el mes en curso y remite a cada beneficio por topes y condiciones.",url:"https://www.bbva.com.uy/personas/campanas/beneficios-bbva-comunidad-plus.html"},
  {id:"tt4",com:"Ta-Ta",tit:"20% extra en Ofertata todos los días con Comunidad Plus",ent:"Tarjeta Comunidad Plus (BBVA Visa)",tipo:"Tarjeta / banco",cat:"Supermercados",pct:20,medio:"BBVA",dias:[],verif:true,src:"web BBVA, oct 2026",cond:"Solo en productos seleccionados de Ofertata. La web no indica topes: consultá el beneficio.",url:"https://www.bbva.com.uy/personas/campanas/beneficios-bbva-comunidad-plus.html"},
- {id:"tt5",com:"Ta-Ta",tit:"10% martes y jueves con BROU Recompensa",ent:"BROU Recompensa Mastercard crédito",tipo:"Tarjeta / banco",cat:"Supermercados",pct:10,medio:"BROU",dias:[2,4],verif:true,src:"web BROU, oct 2026 (vigente al 30/4/2027)",cond:"Tope $2.000 por mes por cuenta, compartido con El Dorado, Macro Mercado, Micro Macro, Red Express y Tienda Inglesa. También BROU PYME Mastercard. En caja y en la web del comercio, no con Mercado Pago. No aplica a corporativas.",url:"https://beneficios.brou.com.uy/medios_de_pago/brou-recompensa/hogar/Recompensa-Supermercados"},
+ {id:"tt5",hasta:"2027-04-30",com:"Ta-Ta",tit:"10% martes y jueves con BROU Recompensa",ent:"BROU Recompensa Mastercard crédito",tipo:"Tarjeta / banco",cat:"Supermercados",pct:10,medio:"BROU",dias:[2,4],verif:true,src:"web BROU, oct 2026 (vigente al 30/4/2027)",cond:"Tope $2.000 por mes por cuenta, compartido con El Dorado, Macro Mercado, Micro Macro, Red Express y Tienda Inglesa. También BROU PYME Mastercard. En caja y en la web del comercio, no con Mercado Pago. No aplica a corporativas.",url:"https://beneficios.brou.com.uy/medios_de_pago/brou-recompensa/hogar/Recompensa-Supermercados"},
  {id:"tt2",com:"Ta-Ta",tit:"25% en la primera compra con Comunidad Plus",ent:"Tarjeta Comunidad Plus (BBVA Visa)",tipo:"Tarjeta / banco",cat:"Supermercados",pct:25,medio:"BBVA",dias:[],verif:true,src:"web BBVA, oct 2026",cond:"Una sola vez, de bienvenida. También en BAS y Multi Ahorro Hogar.",url:"https://www.bbva.com.uy/personas/campanas/beneficios-bbva-comunidad-plus.html"},
  {id:"tt3",com:"Ta-Ta",tit:"Envío gratis los miércoles en tata.com.uy",ent:"Tarjeta Comunidad Plus (BBVA Visa)",tipo:"Tienda online",cat:"Supermercados",pct:null,medio:"BBVA",dias:[3],verif:false,cond:"Dato de noviembre de 2024 (compras online mayores a $2.000). En octubre de 2026 ya no figura en la web de BBVA: confirmá antes de comprar.",url:"https://www.tata.com.uy"},
  // Hometech
@@ -306,7 +337,7 @@ let BASE=[
  // Disco / Devoto / Géant
  {id:"dd2",com:"Disco / Devoto / Géant",tit:"Feria de Pastas: 20% a 40% todos los jueves",ent:"Promo del comercio",tipo:"Promo del comercio",cat:"Supermercados",pct:null,medio:"Cualquier medio de pago",dias:[4],verif:true,src:"web Disco y Géant, oct 2026",cond:"Ravioles, lasañas, canelones y salsas, con 20%, 30% o 40% según el producto. La web no indica banco ni fecha de fin.",url:"https://www.disco.com.uy"},
  {id:"dd3",com:"Disco / Devoto / Géant",tit:"10% a 25% en productos seleccionados con tarjetas Santander",ent:"Santander (HiperMás)",tipo:"Tarjeta / banco",cat:"Supermercados",pct:null,medio:"Santander",dias:[],verif:true,src:"web Disco y Géant, oct 2026",cond:"El % depende del producto: 20% en Canasta de Ahorro (1 al 15/10/2026), 10% en Imprecionantes (1/9 al 1/11/2026), 15% en vinos (hasta 13/10) y 25% en muebles de jardín. Mirá la etiqueta Santander en cada producto.",url:"https://www.disco.com.uy"},
- {id:"dd4",com:"Disco / Devoto / Géant",tit:"Aniversario Géant: ofertas hasta el 25 de octubre",ent:"Evento propio de Géant",tipo:"Evento de ofertas",cat:"Supermercados",pct:null,medio:"Cualquier medio de pago",dias:[],verif:true,src:"web Géant, oct 2026",cond:"Del 24/9 al 25/10/2026. Envío gratis en compras mayores a $10.000. La web no indica un % general.",url:"https://www.geant.com.uy"},
+ {id:"dd4",hasta:"2026-10-25",com:"Disco / Devoto / Géant",tit:"Aniversario Géant: ofertas hasta el 25 de octubre",ent:"Evento propio de Géant",tipo:"Evento de ofertas",cat:"Supermercados",pct:null,medio:"Cualquier medio de pago",dias:[],verif:true,src:"web Géant, oct 2026",cond:"Del 24/9 al 25/10/2026. Envío gratis en compras mayores a $10.000. La web no indica un % general.",url:"https://www.geant.com.uy"},
  {id:"dd1",com:"Disco / Devoto / Géant",tit:"Ofertas semanales y descuentos por día con bancos",ent:"Promo del comercio",tipo:"Promo del comercio",cat:"Supermercados",pct:null,medio:"Cualquier medio de pago",dias:[],verif:false,cond:"Cada cadena publica ofertas semanales en su web y app (Canasta de Ahorro, Semana del Congelado) y descuentos según banco.",url:"https://www.disco.com.uy"},
  // Frog
  {id:"fr1",com:"Frog / Maxi Shop",tit:"Tarjeta propia con beneficios en Frog y Maxi Shop",ent:"Tarjeta BBVA de la cadena",tipo:"Tarjeta / banco",cat:"Supermercados",pct:null,medio:"BBVA",dias:[],verif:false,cond:"Al lanzarse en 2019, BBVA anunció 5% todos los días en Frog y suma de puntos. No se encontró información actual: consultá antes de usarla.",url:"https://www.bbva.com.uy"},
@@ -321,7 +352,7 @@ let BASE=[
  // Rappi
  {id:"rp1",com:"Rappi",tit:"Descuentos en restaurantes con tarjetas del banco",ent:"Scotiabank y otros",tipo:"App",cat:"Delivery",pct:null,medio:"Scotiabank",dias:[],verif:false,cond:"Bancos han tenido promos en Rappi para Montevideo y Punta del Este. Ver la app.",url:"https://www.rappi.com.uy"},
  // ANCAP
- {id:"an1",com:"ANCAP",tit:"5% en combustible lunes y viernes con BROU Recompensa",ent:"BROU Recompensa Mastercard",tipo:"Tarjeta / banco",cat:"Combustible",pct:5,medio:"BROU",dias:[1,5],verif:true,src:"web BROU, oct 2026 (vigente al 30/4/2027)",cond:"Tope de reintegro $500 por mes por cuenta. Crédito BROU Recompensa por POS. No aplica a corporativas.",url:"https://www.brou.com.uy/brou-recompensa"},
+ {id:"an1",hasta:"2027-04-30",com:"ANCAP",tit:"5% en combustible lunes y viernes con BROU Recompensa",ent:"BROU Recompensa Mastercard",tipo:"Tarjeta / banco",cat:"Combustible",pct:5,medio:"BROU",dias:[1,5],verif:true,src:"web BROU, oct 2026 (vigente al 30/4/2027)",cond:"Tope de reintegro $500 por mes por cuenta. Crédito BROU Recompensa por POS. No aplica a corporativas.",url:"https://www.brou.com.uy/brou-recompensa"},
  // Gastronomía / genéricos
  {id:"rs1",com:"Restaurantes adheridos",tit:"Descuentos en restaurantes por día",ent:"Santander, BBVA, Itaú, OCA, BROU",tipo:"Tarjeta / banco",cat:"Gastronomía",pct:null,medio:"Cualquier medio",dias:[],verif:false,cond:"Casi todos los bancos tienen restaurantes adheridos por día. El % suele subir con el nivel de la tarjeta (Oro, Platinum, Black).",url:"https://beneficios.brou.com.uy"},
  {id:"cm1",com:"Comercios adheridos",tit:"Beneficios en más de 300 comercios aliados",ent:"Comunidad Plus (BBVA)",tipo:"Tarjeta / banco",cat:"Indumentaria",pct:null,medio:"BBVA",dias:[],verif:true,src:"web BBVA, oct 2026",cond:"Descuentos todos los días en comercios adheridos de distintos rubros, más Puntos BBVA.",url:"https://www.bbva.com.uy/personas/campanas/beneficios-bbva-comunidad-plus.html"},
@@ -337,8 +368,8 @@ let BASE=[
  {id:"au1",com:"Gomerías Bridgestone (RASA)",tit:"Neumáticos Bridgestone con descuento pagando con Itaú",ent:"Itaú + Bridgestone",tipo:"Tarjeta / banco",cat:"Autos y gomerías",pct:null,medio:"Itaú",dias:[],verif:false,cond:"Promo 2026 de Itaú con Bridgestone en RASA y locales adheridos (rasa.com.uy/itau2026 y neumaticos25off.com). No se pudo leer el detalle: el nombre del sitio sugiere 25%. Confirmá %, tarjetas y gomerías antes de ir.",url:"https://rasa.com.uy/itau2026/"},
  {id:"au2",com:"RUA Asistencia",tit:"30% en servicios de asistencia vehicular",ent:"Todas las tarjetas BROU",tipo:"Tarjeta / banco",cat:"Autos y gomerías",pct:30,medio:"BROU",dias:[],verif:true,src:"web BROU, oct 2026 (ficha de 2017)",cond:"Vale con todas las tarjetas BROU, sujeto a la vigencia del convenio. La ficha no detalla qué servicios incluye (auxilio, grúa): consultá al 2904 0660.",url:"https://beneficios.brou.com.uy/transporte/rua_Transporte"},
  // Ferretería y construcción
- {id:"fe1",com:"Sodimac",tit:"20% con tarjetas de crédito OCA (hasta el 12/10)",ent:"OCA Visa y Mastercard",tipo:"Tarjeta / banco",cat:"Ferretería y construcción",pct:20,medio:"OCA",dias:[],verif:true,src:"web Sodimac, oct 2026",cond:"Del 5 al 12 de octubre de 2026. Tope de reintegro $3.000, en el estado de cuenta. Hasta 6 cuotas sin interés con Visa y 12 con Mastercard.",url:"https://www.sodimac.com.uy/sodimac-uy/content/Medios_de_pago/"},
- {id:"fe2",com:"Sodimac",tit:"20% + 15% extra con la tarjeta BBVA Sodimac (nuevos clientes, hasta el 12/10)",ent:"Tarjeta de crédito BBVA Sodimac",tipo:"Tarjeta / banco",cat:"Ferretería y construcción",pct:20,medio:"BBVA",dias:[],verif:true,src:"web Sodimac, oct 2026",cond:"Del 5 al 12 de octubre de 2026, para nuevos titulares. 20% con tope $3.200 y 15% extra con tope $1.500. Hasta 12 cuotas sin interés en pesos y 18 en dólares.",url:"https://www.sodimac.com.uy/sodimac-uy/content/Medios_de_pago/"},
+ {id:"fe1",hasta:"2026-10-12",com:"Sodimac",tit:"20% con tarjetas de crédito OCA (hasta el 12/10)",ent:"OCA Visa y Mastercard",tipo:"Tarjeta / banco",cat:"Ferretería y construcción",pct:20,medio:"OCA",dias:[],verif:true,src:"web Sodimac, oct 2026",cond:"Del 5 al 12 de octubre de 2026. Tope de reintegro $3.000, en el estado de cuenta. Hasta 6 cuotas sin interés con Visa y 12 con Mastercard.",url:"https://www.sodimac.com.uy/sodimac-uy/content/Medios_de_pago/"},
+ {id:"fe2",hasta:"2026-10-12",com:"Sodimac",tit:"20% + 15% extra con la tarjeta BBVA Sodimac (nuevos clientes, hasta el 12/10)",ent:"Tarjeta de crédito BBVA Sodimac",tipo:"Tarjeta / banco",cat:"Ferretería y construcción",pct:20,medio:"BBVA",dias:[],verif:true,src:"web Sodimac, oct 2026",cond:"Del 5 al 12 de octubre de 2026, para nuevos titulares. 20% con tope $3.200 y 15% extra con tope $1.500. Hasta 12 cuotas sin interés en pesos y 18 en dólares.",url:"https://www.sodimac.com.uy/sodimac-uy/content/Medios_de_pago/"},
  {id:"fe3",deptos:["Montevideo"],com:"Barraca Malvín",tit:"20% en terminaciones, sanitaria y grifería",ent:"Todas las tarjetas BROU",tipo:"Tarjeta / banco",cat:"Ferretería y construcción",pct:20,medio:"BROU",dias:[],verif:true,src:"web BROU, oct 2026",cond:"Materiales de terminación, sanitaria, grifería y equipamiento para baño, cocina y jardín. Descuento en caja. La ficha no indica topes ni vigencia. Av. Estanislao López 4849, Montevideo.",url:"https://beneficios.brou.com.uy/hogar/BarracaMalvin_Hogar"},
  {id:"fe4",com:"Pintelux",tit:"15% todos los días en pinturas",ent:"Santander (Puntos Soy)",tipo:"Tarjeta / banco",cat:"Ferretería y construcción",pct:15,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"La web no indica topes ni vigencia.",url:"https://www.santander.com.uy/beneficios/pintelux"},
  // Ópticas
@@ -347,15 +378,15 @@ let BASE=[
  {id:"op3",com:"Suóptica",tit:"15% todos los días",ent:"Santander",tipo:"Tarjeta / banco",cat:"Ópticas",pct:15,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"La web no indica tarjetas, topes ni vigencia.",url:"https://www.santander.com.uy/beneficios/suoptica"},
  {id:"op4",com:"Óptica Estela Jinchuk",tit:"15% todos los días",ent:"Santander (Puntos Soy)",tipo:"Tarjeta / banco",cat:"Ópticas",pct:15,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"La web no indica topes ni vigencia.",url:"https://www.santander.com.uy/beneficios/optica-estela-jinchuk"},
  // Mascotas
- {id:"mp1",com:"Ser Animal",tit:"Hasta 25% con tarjetas BROU",ent:"BROU (25% Platino y Black; 15% el resto)",tipo:"Tarjeta / banco",cat:"Mascotas",pct:25,medio:"BROU",dias:[],verif:true,src:"web BROU, oct 2026 (vigente al 31/3/2027)",cond:"25% con crédito BROU VISA Platino y Recompensa Black. 15% con débito y con crédito Internacional y Oro. Tope de reintegro $2.000 por mes por cuenta.",url:"https://beneficios.brou.com.uy/transporte/ser-animal"},
- {id:"mp2",com:"Espacio Mascota",tit:"10% en productos para mascotas",ent:"Tarjetas BROU",tipo:"Tarjeta / banco",cat:"Mascotas",pct:10,medio:"BROU",dias:[],verif:true,src:"web BROU, oct 2026 (vigente al 30/11/2026)",cond:"Visa crédito y débito, BROU Recompensa y MI BROU. Socios suman 5% más. No incluye veterinaria, peluquería ni cuotas de socio. Orinoco 4911 y online.",url:"https://beneficios.brou.com.uy/hogar/espacio-mascota"},
+ {id:"mp1",hasta:"2027-03-31",com:"Ser Animal",tit:"Hasta 25% con tarjetas BROU",ent:"BROU (25% Platino y Black; 15% el resto)",tipo:"Tarjeta / banco",cat:"Mascotas",pct:25,medio:"BROU",dias:[],verif:true,src:"web BROU, oct 2026 (vigente al 31/3/2027)",cond:"25% con crédito BROU VISA Platino y Recompensa Black. 15% con débito y con crédito Internacional y Oro. Tope de reintegro $2.000 por mes por cuenta.",url:"https://beneficios.brou.com.uy/transporte/ser-animal"},
+ {id:"mp2",hasta:"2026-11-30",com:"Espacio Mascota",tit:"10% en productos para mascotas",ent:"Tarjetas BROU",tipo:"Tarjeta / banco",cat:"Mascotas",pct:10,medio:"BROU",dias:[],verif:true,src:"web BROU, oct 2026 (vigente al 30/11/2026)",cond:"Visa crédito y débito, BROU Recompensa y MI BROU. Socios suman 5% más. No incluye veterinaria, peluquería ni cuotas de socio. Orinoco 4911 y online.",url:"https://beneficios.brou.com.uy/hogar/espacio-mascota"},
  // Salud y gimnasios
  {id:"gy1",com:"Bigg",tit:"Hasta 25% en la cuota del gimnasio",ent:"Santander (25% Select, 15% crédito)",tipo:"Tarjeta / banco",cat:"Salud y gimnasios",pct:25,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"Plan mensual ilimitado con débito automático en tarjeta Santander: 25% con Select y 15% con crédito. La web no indica vigencia.",url:"https://www.santander.com.uy/beneficios/bigg"},
  // Educación y librerías
  {id:"lb1",com:"Renart Libros",tit:"15% todos los días",ent:"Santander (Puntos Soy)",tipo:"Tarjeta / banco",cat:"Educación y librerías",pct:15,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"La web no indica topes ni vigencia.",url:"https://www.santander.com.uy/beneficios/renart-libros"},
  {id:"lb2",com:"Bookshop",tit:"15% todos los días",ent:"Santander (Puntos Soy)",tipo:"Tarjeta / banco",cat:"Educación y librerías",pct:15,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"La web no indica topes ni vigencia.",url:"https://www.santander.com.uy/beneficios/bookshop"},
  // Transporte
- {id:"tr1",deptos:["Montevideo","Maldonado"],com:"Cabify",tit:"30% en viajes con el código BROUOCT30",ent:"Tarjetas BROU",tipo:"Tarjeta / banco",cat:"Transporte",pct:30,medio:"BROU",dias:[],verif:true,src:"web BROU, oct 2026 (hasta 31/10/2026)",cond:"Montevideo y Maldonado. Cargá el código en la app y pagá con Visa BROU, Recompensa o MI BROU. Hasta 4 viajes por mes, tope $100 por viaje. No acumulable.",url:"https://beneficios.brou.com.uy/transporte/cabify"},
+ {id:"tr1",hasta:"2026-10-31",deptos:["Montevideo","Maldonado"],com:"Cabify",tit:"30% en viajes con el código BROUOCT30",ent:"Tarjetas BROU",tipo:"Tarjeta / banco",cat:"Transporte",pct:30,medio:"BROU",dias:[],verif:true,src:"web BROU, oct 2026 (hasta 31/10/2026)",cond:"Montevideo y Maldonado. Cargá el código en la app y pagá con Visa BROU, Recompensa o MI BROU. Hasta 4 viajes por mes, tope $100 por viaje. No acumulable.",url:"https://beneficios.brou.com.uy/transporte/cabify"},
  {id:"tr2",com:"Buquebus",tit:"10% en paquetes a Argentina y 12 cuotas sin recargo",ent:"Todas las tarjetas Santander",tipo:"Tarjeta / banco",cat:"Transporte",pct:10,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"La web no indica topes ni vigencia.",url:"https://www.santander.com.uy/beneficios/buquebus"},
  // Frontera (medidas del Gobierno)
  {id:"fx1",deptos:["Artigas","Cerro Largo","Rivera","Rocha"],com:"Comercios de frontera",tit:"IVA reducido pagando con débito en supermercados, farmacias y ferias",ent:"Ley 20.419 (medidas de frontera con Brasil)",tipo:"Programa de beneficios",cat:"Supermercados",pct:null,medio:"Débito (cualquier banco)",dias:[],verif:true,src:"montevideo.com.uy, dic 2025",cond:"Comercios a menos de 20 km de Chuy, Río Branco, Aceguá, Rivera, Artigas o Bella Unión. Se devuelve el 100% del IVA mínimo y la tasa básica baja a la mitad, pagando con débito. Rige desde el 1/12/2025 y es transitorio: confirmá que siga vigente.",url:"https://www.gub.uy/ministerio-economia-finanzas/politicas-y-gestion/reduccion-del-imesi-naftas"},
@@ -364,9 +395,19 @@ let BASE=[
  // Tarjeta Joven
  {id:"tj1",com:"Tarjeta Joven",tit:"Descuentos para jóvenes en ópticas, educación, calzado, librerías y más",ent:"Tarjeta Joven (MIDES)",tipo:"Programa de beneficios",cat:"Educación y librerías",pct:null,medio:"Cualquier medio de pago",dias:[],verif:true,src:"gub.uy, oct 2026",cond:"Ejemplos: 25% en Óptica Suiza (lentes), 30% en Instituto Dickens, hasta 15% en planes de ANTEL, 10% en Stadium. Cada comercio indica sus locales: buscá los de tu departamento en la web.",url:"https://www.gub.uy/ministerio-desarrollo-social/tarjetajoven/beneficios"},
  // Interior: Artigas, Cerro Largo, Rivera y Rocha
- {id:"in1",deptos:["Artigas","Cerro Largo","Rivera","Rocha"],com:"Comercios del interior (BROU)",tit:"30% en supermercados, almacenes y carnicerías (lunes y miércoles)",ent:"BROU Recompensa Mastercard crédito",tipo:"Tarjeta / banco",cat:"Supermercados",pct:30,medio:"BROU",dias:[1,3],verif:true,src:"web BROU, oct 2026 (vigente al 31/12/2026)",cond:"Solo en Artigas, Cerro Largo, Rivera y Rocha, en comercios adheridos. Tope $3.000 por mes. No aplica a corporativas.",url:"https://beneficios.brou.com.uy/hogar/beneficiosparavos"},
- {id:"in2",deptos:["Artigas","Cerro Largo","Rivera","Rocha"],com:"Comercios del interior (BROU)",tit:"30% en farmacias (martes y jueves)",ent:"BROU Recompensa Mastercard crédito",tipo:"Tarjeta / banco",cat:"Farmacias",pct:30,medio:"BROU",dias:[2,4],verif:true,src:"web BROU, oct 2026 (vigente al 31/12/2026)",cond:"Solo en Artigas, Cerro Largo, Rivera y Rocha. Tope $3.000 por mes. No vale pagando por POS Handy ni Mercado Pago.",url:"https://beneficios.brou.com.uy/hogar/beneficiosparavos"},
- {id:"in3",deptos:["Artigas","Cerro Largo","Rivera","Rocha"],com:"Comercios del interior (BROU)",tit:"10% en ópticas, ropa y calzado (viernes)",ent:"BROU Recompensa Mastercard crédito",tipo:"Tarjeta / banco",cat:"Ópticas",pct:10,medio:"BROU",dias:[5],verif:true,src:"web BROU, oct 2026 (vigente al 31/12/2026)",cond:"Solo en Artigas, Cerro Largo, Rivera y Rocha. Tope $2.000 por mes.",url:"https://beneficios.brou.com.uy/hogar/beneficiosparavos"},
+ {id:"in1",hasta:"2026-12-31",deptos:["Artigas","Cerro Largo","Rivera","Rocha"],com:"Comercios del interior (BROU)",tit:"30% en supermercados, almacenes y carnicerías (lunes y miércoles)",ent:"BROU Recompensa Mastercard crédito",tipo:"Tarjeta / banco",cat:"Supermercados",pct:30,medio:"BROU",dias:[1,3],verif:true,src:"web BROU, oct 2026 (vigente al 31/12/2026)",cond:"Solo en Artigas, Cerro Largo, Rivera y Rocha, en comercios adheridos. Tope $3.000 por mes. No aplica a corporativas.",url:"https://beneficios.brou.com.uy/hogar/beneficiosparavos"},
+ {id:"in2",hasta:"2026-12-31",deptos:["Artigas","Cerro Largo","Rivera","Rocha"],com:"Comercios del interior (BROU)",tit:"30% en farmacias (martes y jueves)",ent:"BROU Recompensa Mastercard crédito",tipo:"Tarjeta / banco",cat:"Farmacias",pct:30,medio:"BROU",dias:[2,4],verif:true,src:"web BROU, oct 2026 (vigente al 31/12/2026)",cond:"Solo en Artigas, Cerro Largo, Rivera y Rocha. Tope $3.000 por mes. No vale pagando por POS Handy ni Mercado Pago.",url:"https://beneficios.brou.com.uy/hogar/beneficiosparavos"},
+ {id:"in3",hasta:"2026-12-31",deptos:["Artigas","Cerro Largo","Rivera","Rocha"],com:"Comercios del interior (BROU)",tit:"10% en ópticas, ropa y calzado (viernes)",ent:"BROU Recompensa Mastercard crédito",tipo:"Tarjeta / banco",cat:"Ópticas",pct:10,medio:"BROU",dias:[5],verif:true,src:"web BROU, oct 2026 (vigente al 31/12/2026)",cond:"Solo en Artigas, Cerro Largo, Rivera y Rocha. Tope $2.000 por mes.",url:"https://beneficios.brou.com.uy/hogar/beneficiosparavos"},
+ {id:"pr1",hasta:"2026-10-11",com:"Prune",tit:"25% en toda la tienda (9 al 11 de octubre)",ent:"Promo del comercio",tipo:"Promo del comercio",cat:"Indumentaria",pct:25,medio:"Cualquier medio de pago",dias:[],verif:true,src:"web Prune, oct 2026",cond:"Del 9 al 11 de octubre de 2026, en toda la tienda online. Envío gratis desde $4.000. La web no indica si también vale en los locales ni si hay topes.",url:"https://www.prune.com.uy"},
+ {id:"pr2",com:"Prune",tit:"15% en la primera compra online al suscribirte al newsletter",ent:"Newsletter de Prune",tipo:"Tienda online",cat:"Indumentaria",pct:15,medio:"Cualquier medio de pago",dias:[],verif:true,src:"web Prune, oct 2026",cond:"Solo la primera compra en prune.com.uy, después de suscribirte al newsletter en la web. La web no indica vigencia ni si se acumula con otras promos.",url:"https://www.prune.com.uy"},
+ {id:"md1",hasta:"2026-12-31",com:"TOTO",tit:"Hasta 25% de lunes a miércoles con tarjetas BROU",ent:"BROU (25% Black y Platinum; 15% VISA y Recompensa)",tipo:"Tarjeta / banco",cat:"Indumentaria",pct:25,medio:"BROU",dias:[1,2,3],verif:true,src:"web BROU, oct 2026 (vigente 5/10 al 31/12/2026)",cond:"25% con crédito BROU Black, Platinum o superior; 15% con BROU VISA y BROU Recompensa Mastercard. En sucursales y en la web. No vale en outlets, ofertas semanales ni pagando con canje de pasos. La ficha no indica topes.",url:"https://beneficios.brou.com.uy/moda/toto"},
+ {id:"md2",hasta:"2026-12-31",com:"Skechers",tit:"Hasta 25% de lunes a miércoles con tarjetas BROU",ent:"BROU (25% Black y Platinum; 15% VISA y Recompensa)",tipo:"Tarjeta / banco",cat:"Indumentaria",pct:25,medio:"BROU",dias:[1,2,3],verif:true,src:"web BROU, oct 2026 (vigente 5/10 al 31/12/2026)",cond:"25% con crédito BROU Black, Platinum o superior; 15% con BROU VISA y BROU Recompensa Mastercard. En la web y en los locales de Montevideo Shopping, Tres Cruces, Portones, Punta del Este y San José de Mayo. La ficha no indica topes.",url:"https://beneficios.brou.com.uy/moda/skechers"},
+ {id:"md3",hasta:"2026-12-31",com:"Guapa!",tit:"20% todos los días con crédito BROU (10% con débito)",ent:"Tarjetas BROU VISA y Recompensa",tipo:"Tarjeta / banco",cat:"Indumentaria",pct:20,medio:"BROU",dias:[],verif:true,src:"web BROU, oct 2026 (vigente al 31/12/2026)",cond:"20% con crédito BROU VISA y Recompensa (Internacional, Oro, Platinum y Black); 10% con débito. En el local, en artículos seleccionados. No vale pagando con Mercado Pago ni con tarjetas corporativas.",url:"https://beneficios.brou.com.uy/moda/guapa"},
+ {id:"md4",hasta:"2026-12-01",com:"Comercios de moda adheridos (Itaú)",tit:"15% todos los días en locales de moda adheridos",ent:"Crédito Visa y Mastercard Itaú",tipo:"Tarjeta / banco",cat:"Indumentaria",pct:15,medio:"Itaú",dias:[],verif:true,src:"web Itaú, oct 2026 (vigente 1/3 al 1/12/2026)",cond:"Con tarjetas de crédito Visa y Mastercard de Itaú, en locales de moda adheridos e identificados. Descuento en el momento. No acumulable con otras campañas. La lista de locales está en la web de beneficios de Itaú.",url:"https://www.itau.com.uy/inst/moda.html"},
+ {id:"md5",com:"Mango",tit:"15% todos los días",ent:"Santander (Puntos Soy)",tipo:"Tarjeta / banco",cat:"Indumentaria",pct:15,medio:"Santander",dias:[],deptos:["Montevideo"],verif:true,src:"web Santander, oct 2026",cond:"Local de Luis Alberto de Herrera 1290. Descuento en el punto de venta. No acumulable. La web no indica topes ni vigencia.",url:"https://www.santander.com.uy/beneficios/mango"},
+ {id:"md6",com:"Columbia",tit:"15% todos los días",ent:"Santander (Puntos Soy)",tipo:"Tarjeta / banco",cat:"Indumentaria",pct:15,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"La web no indica topes, vigencia ni locales.",url:"https://www.santander.com.uy/beneficios/columbia"},
+ {id:"md7",com:"Mónaco Calzados",tit:"15% todos los días",ent:"Santander",tipo:"Tarjeta / banco",cat:"Indumentaria",pct:15,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"La web no indica tarjetas, topes, vigencia ni locales.",url:"https://www.santander.com.uy/beneficios/monaco-calzados"},
+ {id:"md8",com:"Desigual",tit:"15% todos los días",ent:"Santander",tipo:"Tarjeta / banco",cat:"Indumentaria",pct:15,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"La web no indica tarjetas, topes, vigencia ni locales.",url:"https://www.santander.com.uy/beneficios/desigual"},
  {id:"br2",com:"Cualquier comercio",tit:"BROU Recompensa: 1 punto cada $100 = $1",ent:"BROU Recompensa",tipo:"Programa de beneficios",cat:"Puntos y cashback",pct:1,medio:"BROU",dias:[],verif:true,src:"web BROU, oct 2026",cond:"Suman compras y débitos automáticos. Las prepagas no acumulan.",url:"https://www.brou.com.uy/brou-recompensa"},
  {id:"it1",com:"Cualquier comercio",tit:"Itaú Volar: millas por tus compras",ent:"Itaú",tipo:"Programa de beneficios",cat:"Puntos y cashback",pct:null,medio:"Itaú",dias:[],verif:false,cond:"Acumulás millas canjeables por pasajes.",url:"https://www.itau.com.uy"},
  {id:"af1",com:"Cualquier comercio",tit:"Ahorra Fácil: reintegro por productos de marcas adheridas",ent:"App",tipo:"App",cat:"Puntos y cashback",pct:null,medio:"Cualquier medio de pago",dias:[],verif:false,cond:"Comprás en cualquier comercio, subís el ticket y al llegar a $100 te transfieren el ahorro.",url:"https://www.google.com/search?q=Ahorra+F%C3%A1cil+Uruguay"},
@@ -403,7 +444,12 @@ function mono(name,cls="",style=""){
 $("stripe").innerHTML=PAL.map(c=>`<i style="background:${c[0]}"></i>`).join("");
 
 /* ---------- reglas de negocio ---------- */
-const all=()=>[...mine,...BASE];
+const HOY_ISO=(()=>{const n=new Date();return new Date(n.getTime()-n.getTimezoneOffset()*60000).toISOString().slice(0,10)})();
+const vigente=d=>!d.hasta||d.hasta>=HOY_ISO;
+const diasRest=d=>d.hasta?Math.round((new Date(d.hasta+"T00:00:00")-new Date(HOY_ISO+"T00:00:00"))/864e5):null;
+const fechaCorta=iso=>{const [y,m,dd]=iso.split("-");return `${+dd}/${+m}`};
+function expTag(d){const r=diasRest(d);if(r==null||r>5)return "";return `<span class="tag exp">${r<=0?"Último día":r===1?"Vence mañana":`Vence en ${r} días`}</span>`}
+const all=()=>[...mine,...BASE].filter(vigente);
 const validOn=(d,day)=>!d.dias||!d.dias.length||d.dias.includes(day);
 const inZone=d=>st.depto==="todos"||!d.deptos||!d.deptos.length||d.deptos.includes(st.depto);
 const isLocal=d=>st.depto!=="todos"&&d.deptos&&d.deptos.includes(st.depto);
@@ -429,7 +475,7 @@ function dealCard(d,day){
     <span class="pc">${pcBlock(d)}</span>
     <span class="bd">
       <span class="top">${mono(d.com,"",cv(comCat(d.com,d.cat)))}<span><span class="h3">${esc(d.tit)}</span><span class="who">${esc(d.com)} · ${esc(d.medio==="Cualquier medio de pago"?"Cualquier medio":d.medio)}</span></span></span>
-      <span class="meta">${today?'<span class="tag hoy">Vale hoy</span>':`<span class="tag">${esc(daysTxt(d))}</span>`}<span class="tag ${w.k}">${esc(w.t)}</span>${statusTag(d)}${favs.has(d.id)?'<span class="tag">★ Guardado</span>':""}</span>
+      <span class="meta">${today?'<span class="tag hoy">Vale hoy</span>':`<span class="tag">${esc(daysTxt(d))}</span>`}<span class="tag ${w.k}">${esc(w.t)}</span>${expTag(d)}${statusTag(d)}${favs.has(d.id)?'<span class="tag">★ Guardado</span>':""}</span>
     </span></button>`;
 }
 const findDeal=id=>all().find(d=>d.id===id);
@@ -582,16 +628,18 @@ function openDeal(id){
   const d=findDeal(id);if(!d)return;const w=where(d);
   openSheet(`<div class="big" style="${cv(d.cat)}">${mono(d.com,"lg",cv(comCat(d.com,d.cat)))}<div>${d.pct!=null&&d.pct!==""?`<b>${d.pct}%</b>`:""}<span style="display:block">${esc(d.com)}</span></div></div>
     <h2>${esc(d.tit)}</h2>
-    <div class="meta">${validOn(d,hoy)?'<span class="tag hoy">Vale hoy</span>':""}${statusTag(d)}</div>
-    <dl class="facts"><dt>Cuándo</dt><dd>${esc(daysTxt(d))}</dd><dt>Dónde</dt><dd>${esc(w.t)}</dd><dt>Cómo pagar</dt><dd>${esc(d.medio)}${d.ent&&d.ent!==d.medio?` · ${esc(d.ent)}`:""}</dd><dt>Rubro</dt><dd>${esc(d.cat)}</dd>${d.src?`<dt>Fuente</dt><dd>${esc(d.src)}</dd>`:""}</dl>
+    <div class="meta">${validOn(d,hoy)?'<span class="tag hoy">Vale hoy</span>':""}${expTag(d)}${statusTag(d)}</div>
+    <dl class="facts"><dt>Cuándo</dt><dd>${esc(daysTxt(d))}${d.hasta?` · hasta el ${fechaCorta(d.hasta)}`:""}</dd><dt>Dónde</dt><dd>${esc(w.t)}</dd><dt>Cómo pagar</dt><dd>${esc(d.medio)}${d.ent&&d.ent!==d.medio?` · ${esc(d.ent)}`:""}</dd><dt>Rubro</dt><dd>${esc(d.cat)}</dd>${d.src?`<dt>Fuente</dt><dd>${esc(d.src)}</dd>`:""}</dl>
     ${d.cond?`<p class="cond">${esc(d.cond)}</p>`:""}
     ${d.pct?`<div class="calc"><label for="calcIn">Si gastás $</label><input id="calcIn" type="number" inputmode="numeric" min="0" placeholder="2000"><span>ahorrás</span><output id="calcOut">—</output></div><small style="color:var(--muted)">Cálculo aproximado: revisá el tope en las condiciones.</small>`:""}
-    <div class="acts">${d.url?`<a class="btn dark" href="${esc(d.url)}" target="_blank" rel="noopener">Ver en la web ↗</a>`:""}<button type="button" class="btn ghost" id="favBtn">${favs.has(d.id)?"★ Guardado":"☆ Guardar"}</button>${d.mio?`<button type="button" class="btn ghost" id="delBtn">Eliminar</button>`:`<button type="button" class="btn ghost" id="repBtn">Reportar un error</button>`}</div>
+    <div class="acts">${d.url?`<a class="btn dark" href="${esc(d.url)}" target="_blank" rel="noopener">Ver en la web ↗</a>`:""}${d.mio?"":`<button type="button" class="btn" id="shareBtn">Compartir</button>`}<button type="button" class="btn ghost" id="favBtn">${favs.has(d.id)?"★ Guardado":"☆ Guardar"}</button>${d.mio?`<button type="button" class="btn ghost" id="delBtn">Eliminar</button>`:`<button type="button" class="btn ghost" id="repBtn">Reportar un error</button>`}</div>
     ${!st.ex.com||st.ex.com!==d.com?`<button type="button" class="linkbtn" id="moreCom">Ver todos los descuentos de ${esc(d.com)} →</button>`:""}`);
   const ci=$("calcIn");if(ci)ci.addEventListener("input",()=>{const v=+ci.value;$("calcOut").textContent=v>0?"$"+Math.round(v*d.pct/100).toLocaleString("es-UY"):"—"});
   $("favBtn").onclick=()=>{favs.has(d.id)?favs.delete(d.id):favs.add(d.id);LS.set("rebaja_favs",[...favs]);$("favBtn").textContent=favs.has(d.id)?"★ Guardado":"☆ Guardar";toast(favs.has(d.id)?"Guardado en tus favoritos":"Quitado de favoritos")};
   if($("delBtn"))$("delBtn").onclick=()=>{mine=mine.filter(x=>x.id!==d.id);LS.set("rebaja_mine",mine);closeSheet();toast("Descuento eliminado")};
   if($("repBtn"))$("repBtn").onclick=()=>openReport(d);
+  if($("shareBtn"))$("shareBtn").onclick=()=>shareDeal(d);
+  if(!d.mio)track("abrir",d.id);
   if($("moreCom"))$("moreCom").onclick=()=>{st.ex.com=d.com;st.ex.q="";closeSheet();setTab("Explorar")};
 }
 
@@ -642,7 +690,8 @@ function openHelp(){
     <dt><span class="tag ok">Confirmado</span></dt><dd>Lo verificamos en la web del banco, del comercio o del Gobierno. En el detalle ves la fuente y la fecha.</dd>
     <dt><span class="tag chk">Confirmar antes de ir</span></dt><dd>Es una promo habitual pero no encontramos datos actuales. Revisá el enlace antes de pagar.</dd>
     <dt><span class="tag zone">Solo en…</span></dt><dd>Vale únicamente en esos departamentos.</dd>
-    <dt><span class="tag">Según sucursal</span></dt><dd>Es de una cadena: fijate si hay un local en tu zona.</dd></dl>
+    <dt><span class="tag">Según sucursal</span></dt><dd>Es de una cadena: fijate si hay un local en tu zona.</dd>
+    <dt><span class="tag exp">Vence pronto</span></dt><dd>La promo termina en los próximos días. Las vencidas se quitan solas.</dd></dl>
     <p class="lead">Los descuentos se revisan todas las semanas. Si ves uno mal, abrilo y tocá <b>Reportar un error</b>. Los distintivos con iniciales no son logos oficiales.</p>`);
 }
 function openWelcome(step){
@@ -674,39 +723,53 @@ function saveLogo(name,file){
     img.onerror=()=>toast("No se pudo leer esa imagen");img.src=fr.result};fr.readAsDataURL(file);
 }
 
-/* ---------- reportes (Supabase) ---------- */
+/* ---------- Supabase: reportes, datos, contador ---------- */
 const SB_URL="https://mrogllwrherfyjpzgvly.supabase.co";
 const SB_KEY="sb_publishable_5T0j9FvyB4mIicx39H4caA_wj3IXsxs";
 let REV="9 de octubre de 2026";
+const sbPost=(tabla,obj)=>fetch(SB_URL+"/rest/v1/"+tabla,{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json",Prefer:"return=minimal"},body:JSON.stringify(obj),keepalive:true});
+function track(evento,deal){try{sbPost("visitas",deal?{evento,deal:String(deal).slice(0,40)}:{evento}).catch(()=>{})}catch(e){}}
 const REASONS=["Ya no existe o venció","Cambió el porcentaje, los días o el tope","No aplica en mi departamento","Otro problema"];
 function openReport(d){
   openSheet(`<h2>¿Qué está mal?</h2><p class="lead">${esc(d.com)}: ${esc(d.tit)}</p><form class="form" id="repForm"><div class="radio">${REASONS.map((r,i)=>`<label><input type="radio" name="mot" value="${esc(r)}" ${i===0?"checked":""}> ${esc(r)}</label>`).join("")}</div>
     <label>Contanos más (opcional)<textarea id="repTxt" rows="3" maxlength="500" placeholder="Ej.: ahora es 15% y solo los martes"></textarea></label><div class="acts"><button class="btn" type="submit" id="repSend">Enviar aviso</button></div></form>`);
   $("repForm").onsubmit=async e=>{e.preventDefault();const b=$("repSend");b.disabled=true;b.textContent="Enviando…";
     try{
-      const r=await fetch(SB_URL+"/rest/v1/reportes",{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json",Prefer:"return=minimal"},
-        body:JSON.stringify({deal:String(d.id).slice(0,40),com:String(d.com||"").slice(0,200),tit:String(d.tit||"").slice(0,300),motivo:sheet.querySelector("input[name=mot]:checked").value,detalle:$("repTxt").value.trim().slice(0,500),depto:String(st.depto).slice(0,40)})});
+      const r=await sbPost("reportes",{deal:String(d.id).slice(0,40),com:String(d.com||"").slice(0,200),tit:String(d.tit||"").slice(0,300),motivo:sheet.querySelector("input[name=mot]:checked").value,detalle:$("repTxt").value.trim().slice(0,500),depto:String(st.depto).slice(0,40)});
       if(!r.ok)throw new Error(r.status);
       closeSheet();toast("¡Gracias! Lo vamos a revisar");
     }catch(err){b.disabled=false;b.textContent="Enviar aviso";toast("No se pudo enviar el aviso. Probá de nuevo más tarde.")}};
 }
 function openReports(){}
-/* Descuentos desde Supabase; si falla, queda la copia incluida arriba */
+async function shareDeal(d){
+  const url=location.origin+location.pathname+"?d="+encodeURIComponent(d.id);
+  const pct=d.pct!=null&&d.pct!==""?d.pct+"% · ":"";
+  const text=`${pct}${d.com}: ${d.tit}. ${daysTxt(d)}${d.hasta?`, hasta el ${fechaCorta(d.hasta)}`:""}. Lo vi en Rebaja.uy`;
+  track("compartir",d.id);
+  if(navigator.share){try{await navigator.share({title:"Rebaja.uy",text,url});return}catch(e){if(e&&e.name==="AbortError")return}}
+  window.open("https://wa.me/?text="+encodeURIComponent(text+"\n"+url),"_blank","noopener");
+}
+let deep=null;try{deep=new URLSearchParams(location.search).get("d")}catch(e){}
+function tryDeep(){if(deep&&findDeal(deep)){const id=deep;deep=null;openDeal(id)}}
 (async()=>{
   try{
     const r=await fetch(SB_URL+"/rest/v1/descuentos?select=*&activo=eq.true",{headers:{apikey:SB_KEY}});
     if(!r.ok)throw new Error(r.status);
     const rows=await r.json();if(!Array.isArray(rows)||!rows.length)throw new Error("vacío");
-    BASE=rows.map(d=>{const o={...d,pct:d.pct==null?null:+d.pct,dias:d.dias||[],url:d.url||""};if(!o.src)delete o.src;if(!o.cond)delete o.cond;if(!o.deptos||!o.deptos.length)delete o.deptos;delete o.activo;delete o.actualizado;return o});
+    BASE=rows.map(d=>{const o={...d,pct:d.pct==null?null:+d.pct,dias:d.dias||[],url:d.url||""};["src","cond","hasta"].forEach(k=>{if(!o[k])delete o[k]});if(!o.deptos||!o.deptos.length)delete o.deptos;delete o.activo;delete o.actualizado;return o});
     const last=rows.map(d=>d.actualizado).filter(Boolean).sort().pop();
     if(last)REV=new Date(last).toLocaleDateString("es-UY",{day:"numeric",month:"long",year:"numeric"});
-    renderAll();
+    if(!dlg.open)renderAll();
   }catch(e){}
+  tryDeep();
 })();
+try{if(!sessionStorage.getItem("rebaja_v")){sessionStorage.setItem("rebaja_v","1");track("visita")}}catch(e){track("visita")}
+window.addEventListener("appinstalled",()=>track("instalada"));
 
 /* ---------- inicio ---------- */
 renderAll();
-if(!LS.get("rebaja_onb",0))openWelcome(1);
+if(!LS.get("rebaja_onb",0)&&!deep)openWelcome(1);
+tryDeep();
 </script>
 </body>
 </html>
