@@ -1,6 +1,6 @@
 // Rebaja.uy: permite instalarla como app y abrirla rápido, incluso sin señal.
 // Siempre intenta traer lo más nuevo de internet; si no hay conexión, usa la última copia guardada.
-const CACHE = "rebaja-v1";
+const CACHE = "rebaja-v2";
 const BASE = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
