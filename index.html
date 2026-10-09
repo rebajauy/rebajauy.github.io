@@ -274,6 +274,7 @@ dialog::backdrop{background:rgba(15,13,26,.6)}
 <script>
 const DIAS=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
 const CATS=["Todas","Supermercados","Gastronomía","Cafeterías","Heladerías","Pastelerías y panaderías","Comida rápida","Delivery","Combustible","Farmacias","Hogar y tecnología","Decoración","Viveros y jardín","Indumentaria","Outlets","Compras online","Viajes y hotelería","Cines","Entretenimiento","Autos y gomerías","Ferretería y construcción","Ópticas","Mascotas","Salud y gimnasios","Educación y librerías","Transporte","Puntos y cashback","Impuestos"];
+CATS.splice(1,CATS.length-1,...CATS.slice(1).sort((a,b)=>a.localeCompare(b,"es")));
 const TIPOS=["Todos","Promo del comercio","Tarjeta / banco","App","Tienda online","Evento de ofertas","Programa de beneficios"];
 const DEPTOS=["Artigas","Canelones","Cerro Largo","Colonia","Durazno","Flores","Florida","Lavalleja","Maldonado","Montevideo","Paysandú","Río Negro","Rivera","Rocha","Salto","San José","Soriano","Tacuarembó","Treinta y Tres"];
 const MEDIOS=["Cualquier medio","Cualquier medio de pago","BROU","Itaú","Santander","Scotiabank","BBVA","HSBC","OCA","Creditel","Italmundo","Passcard","Prex","Mi Dinero","Mercado Pago","Débito (cualquier banco)","Tarjeta extranjera"];
@@ -519,7 +520,7 @@ function renderHoy(){
   const cats={};yours.forEach(d=>cats[d.cat]=(cats[d.cat]||0)+1);
   if(st.hoyCat!=="Todas"&&!cats[st.hoyCat])st.hoyCat="Todas";
   const catChips=`<button type="button" class="chip" data-hcat="Todas" aria-pressed="${st.hoyCat==="Todas"}">Todo <span class="n">${yours.length}</span></button>`+
-    Object.keys(cats).sort((a,b)=>cats[b]-cats[a]).map(c=>`<button type="button" class="chip" data-hcat="${esc(c)}" style="${cv(c)}" aria-pressed="${st.hoyCat===c}"><span class="dot"></span>${esc(c)} <span class="n">${cats[c]}</span></button>`).join("");
+    Object.keys(cats).sort((a,b)=>a.localeCompare(b,"es")).map(c=>`<button type="button" class="chip" data-hcat="${esc(c)}" style="${cv(c)}" aria-pressed="${st.hoyCat===c}"><span class="dot"></span>${esc(c)} <span class="n">${cats[c]}</span></button>`).join("");
   const list=yours.filter(d=>st.hoyCat==="Todas"||d.cat===st.hoyCat).sort(byScore);
   const shown=st.showAll?list:list.slice(0,8);
   const local=yours.filter(isLocal).length;
