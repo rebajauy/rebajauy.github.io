@@ -215,6 +215,17 @@ dialog::backdrop{background:rgba(15,13,26,.6)}
   .toast{animation:up .25s both}
   @keyframes up{from{transform:translate(-50%,10px)}to{transform:translate(-50%,0)}}
 }
+
+/* instalar como app */
+.instbar{margin-top:14px;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;background:var(--head);color:#fff}
+.instbar .ic{width:40px;height:40px;border-radius:11px;flex:none}
+.instbar .tx{flex:1;min-width:0;font-size:.85rem;line-height:1.3}
+.instbar .tx b{display:block;font-size:.95rem}
+.instbar .btn{padding:9px 14px;font-size:.88rem}
+.instbar .nx{border:0;background:none;color:rgba(255,255,255,.7);font-size:1.2rem;cursor:pointer;padding:4px 6px}
+.isteps{margin:0;padding-left:22px;display:grid;gap:10px;font-size:.95rem}
+.isteps .k{display:inline-flex;align-items:center;gap:4px;padding:1px 8px;border-radius:8px;background:var(--soft);font-weight:700;white-space:nowrap}
+.isteps svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;vertical-align:-3px}
 </style>
 </head>
 <body>
@@ -517,7 +528,7 @@ function renderHoy(){
     h+=`<div class="sec"><h2>Con otras tarjetas</h2><span>${others.length} más este día</span></div><div class="list">${top.map(d=>dealCard(d,day)).join("")}</div>`;
   }
   if(st.depto==="todos")h+=`<div class="callout"><b>¿Dónde estás?</b><span>Elegí tu departamento para ver también los descuentos de tu zona, como los de frontera o del interior.</span><button type="button" class="linkbtn" data-open="depto">Elegir departamento →</button></div>`;
-  $("vHoy").innerHTML=h;
+  $("vHoy").innerHTML=installBar()+h;
 }
 $("vHoy").addEventListener("click",e=>{
   const dy=e.target.closest("[data-off]");if(dy){st.off=+dy.dataset.off;st.showAll=false;renderHoy();return}
@@ -595,6 +606,7 @@ function renderAjustes(){
     row("cards","Mis tarjetas y apps",myCards.size?esc([...myCards].join(", ")):"Ninguna elegida: ves todos los descuentos")+
     row("add","Agregar un descuento","Cargá una promo que conozcas")+
     row("logos","Logos","Subí los logos de los comercios")+
+    (isApp()?"":row("install","Instalar como app","Tenela en tu pantalla de inicio o escritorio"))+
     row("help","Cómo funciona","Qué significa cada etiqueta")+
     row("welcome","Ver la bienvenida otra vez","Volvé a elegir departamento y tarjetas")+
     (reportsCount!=null?row("reports","Reportes recibidos",`${reportsCount} ${reportsCount===1?"aviso":"avisos"} de usuarios (solo lo ves vos)`):"")+
@@ -603,7 +615,7 @@ function renderAjustes(){
 }
 document.addEventListener("click",e=>{
   const o=e.target.closest("[data-open]");if(!o)return;
-  ({depto:openDepto,cards:openCards,add:openAdd,logos:openLogos,help:openHelp,welcome:()=>openWelcome(1),reports:openReports})[o.dataset.open]?.();
+  ({depto:openDepto,cards:openCards,add:openAdd,logos:openLogos,help:openHelp,welcome:()=>openWelcome(1),reports:openReports,install:openInstall})[o.dataset.open]?.();
 });
 
 /* ---------- navegación ---------- */
@@ -765,6 +777,48 @@ function tryDeep(){if(deep&&findDeal(deep)){const id=deep;deep=null;openDeal(id)
 })();
 try{if(!sessionStorage.getItem("rebaja_v")){sessionStorage.setItem("rebaja_v","1");track("visita")}}catch(e){track("visita")}
 window.addEventListener("appinstalled",()=>track("instalada"));
+
+/* ---------- instalar como app ---------- */
+var instPrompt=null;
+function isApp(){return (window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true}
+function plat(){
+  const ua=navigator.userAgent||"";
+  const ios=/iPad|iPhone|iPod/.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+  if(ios)return /CriOS|FxiOS|EdgiOS/.test(ua)?"ios-otro":"ios";
+  if(/Android/.test(ua))return "android";
+  if(/Macintosh/.test(ua)&&/Safari/.test(ua)&&!/Chrome|Chromium|Edg|Firefox/.test(ua))return "mac-safari";
+  if(/Firefox/.test(ua))return "firefox";
+  return "pc";
+}
+function instHidden(){const t=LS.get("rebaja_inst_x",0);return t&&Date.now()-t<14*864e5}
+function installBar(){
+  if(isApp()||instHidden())return "";
+  const p=plat();if(p==="firefox"&&!instPrompt)return "";
+  const movil=/^(ios|ios-otro|android)$/.test(p);
+  return `<div class="instbar"><img class="ic" src="icon-192.png" alt=""><div class="tx"><b>Tené Rebaja.uy como app</b>${movil?"Gratis, en tu pantalla de inicio.":"Abrila con un clic, en su propia ventana."}</div><button type="button" class="btn" data-open="install">Instalar</button><button type="button" class="nx" data-instx aria-label="Ahora no">×</button></div>`;
+}
+const SH=`<svg viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>`;
+const DOTS=`<svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>`;
+async function openInstall(){
+  if(isApp()){toast("Ya la estás usando como app");return}
+  if(instPrompt){
+    const ev=instPrompt;instPrompt=null;
+    try{ev.prompt();const r=await ev.userChoice;if(r&&r.outcome==="accepted")toast("¡Listo! Rebaja.uy quedó instalada")}catch(e){}
+    renderAll();return;
+  }
+  const p=plat();let pasos,nota="";
+  if(p==="ios")pasos=[`Tocá el botón <span class="k">${SH} Compartir</span> abajo de la pantalla (en iPad, arriba a la derecha). Si no lo ves, tocá primero <span class="k">···</span>.`,`Deslizá y elegí <span class="k">Agregar a inicio</span>.`,`Tocá <span class="k">Agregar</span>. El ícono de Rebaja.uy aparece junto a tus apps.`];
+  else if(p==="ios-otro")pasos=[`Tocá el botón <span class="k">${SH} Compartir</span> del navegador.`,`Elegí <span class="k">Agregar a inicio</span>.`,`Tocá <span class="k">Agregar</span>.`],nota="Si no aparece la opción, abrí rebajauy.github.io en Safari y hacelo desde ahí.";
+  else if(p==="android")pasos=[`Tocá el menú <span class="k">${DOTS}</span> arriba a la derecha.`,`Elegí <span class="k">Instalar app</span> o <span class="k">Agregar a la pantalla principal</span>.`,`Confirmá con <span class="k">Instalar</span>.`];
+  else if(p==="mac-safari")pasos=[`En la barra de arriba, abrí el menú <span class="k">Archivo</span>.`,`Elegí <span class="k">Agregar al Dock</span>.`,`Tocá <span class="k">Agregar</span>. La vas a encontrar en el Dock y en Aplicaciones.`];
+  else if(p==="firefox")pasos=[`Firefox no instala apps web en la computadora.`,`Guardala en favoritos con <span class="k">Ctrl + D</span> (o <span class="k">⌘ + D</span> en Mac).`],nota="Para tenerla como app, abrila en Chrome o Edge.";
+  else pasos=[`Buscá el ícono de instalar <span class="k">⊕</span> a la derecha de la barra de direcciones.`,`O abrí el menú <span class="k">${DOTS}</span> → <span class="k">Transmitir, guardar y compartir</span> → <span class="k">Instalar página como app</span>.`,`Confirmá con <span class="k">Instalar</span>.`];
+  openSheet(`<h2>Instalar Rebaja.uy</h2><p class="lead">Es gratis, no ocupa casi espacio y se actualiza sola.</p><ol class="isteps">${pasos.map(x=>`<li>${x}</li>`).join("")}</ol>${nota?`<p class="lead">${nota}</p>`:""}<button type="button" class="btn ghost" data-close>Entendido</button>`);
+}
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();instPrompt=e;if(!dlg.open)renderAll()});
+window.addEventListener("appinstalled",()=>{instPrompt=null;if(!dlg.open)renderAll()});
+document.addEventListener("click",e=>{if(e.target.closest("[data-instx]")){LS.set("rebaja_inst_x",Date.now());renderAll()}});
+if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 
 /* ---------- inicio ---------- */
 renderAll();
