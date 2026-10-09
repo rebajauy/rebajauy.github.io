@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Descuentos vigentes en Uruguay por comercio, banco, día y departamento.">
+<meta name="theme-color" content="#1a1530">
+<title>Rebaja Uruguay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: app de una columna con barra de pestañas abajo (Hoy, Explorar, Guardados, Ajustes); cada rubro tiene su color */
+:root{
+  --bg:#f3f4fa; --surface:#ffffff; --ink:#1a1530; --muted:#625d7a; --line:#e3e1ef; --soft:#eeedf7;
+  --head:#1a1530; --hot:#ff3d7f; --sun:#ffd23f; --ok:#0a8f5a; --warn:#b85c00;
+  --display:"Unbounded",ui-sans-serif,system-ui,sans-serif;
+  --body:"Figtree",ui-sans-serif,system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f0d1a; --surface:#1b1830; --ink:#f1effa; --muted:#a7a2c2; --line:#2e2a48; --soft:#24203b;
+  --head:#07060d; --hot:#ff5b93; --sun:#ffd23f; --ok:#4fe0a0; --warn:#ffb15c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f0d1a; --surface:#1b1830; --ink:#f1effa; --muted:#a7a2c2; --line:#2e2a48; --soft:#24203b;
+  --head:#07060d; --hot:#ff5b93; --sun:#ffd23f; --ok:#4fe0a0; --warn:#ffb15c; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+button,input,select,textarea{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px}
+
+/* cabecera */
+.hero{background:var(--head);color:#fff;padding-inline:16px;padding-block:14px 0}
+.hero-in{max-width:760px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:12px}
+h1{font-family:var(--display);font-weight:800;font-size:1.3rem;margin:0;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+h1 .pc{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--hot);color:#fff;font-size:.95rem;transform:rotate(-8deg)}
+h1 em{font-style:normal;color:var(--sun)}
+.pills{display:flex;gap:6px;min-width:0}
+.pill{border:0;border-radius:999px;padding:7px 12px;font-size:.82rem;font-weight:700;cursor:pointer;background:rgba(255,255,255,.12);color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:46vw}
+.pill.loc{background:var(--sun);color:#1a1530}
+.stripe{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;height:5px}
+
+/* pestañas */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs-in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.tab{border:0;background:none;padding:9px 4px 10px;display:grid;justify-items:center;gap:3px;font-size:.74rem;font-weight:700;color:var(--muted);cursor:pointer}
+.tab svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tab[aria-selected="true"]{color:var(--hot)}
+.tab .badge{position:absolute;margin-left:22px;margin-top:-4px;background:var(--hot);color:#fff;font-size:.62rem;border-radius:999px;padding:0 5px}
+.view{padding-block:16px 24px}
+
+/* Hoy */
+.days{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-block:2px 6px;margin-inline:-16px;padding-inline:16px}
+.days::-webkit-scrollbar{display:none}
+.day{flex:none;border:2px solid var(--line);background:var(--surface);border-radius:16px;padding:8px 12px;min-width:66px;text-align:center;cursor:pointer;display:grid;gap:1px}
+.day b{font-size:.85rem}
+.day small{font-size:.7rem;color:var(--muted);font-weight:600}
+.day[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.day[aria-pressed="true"] small{color:var(--bg);opacity:.75}
+.greet{margin:14px 2px 4px;font-family:var(--display);font-size:1.25rem;line-height:1.2;text-wrap:balance}
+.greet em{font-style:normal;color:var(--hot)}
+.sub{margin:0 2px 12px;color:var(--muted);font-size:.9rem}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-block:2px 8px;margin-inline:-16px;padding-inline:16px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;font-size:.85rem;font-weight:600;padding:7px 13px;border-radius:999px;border:2px solid var(--c,var(--line));background:var(--surface);cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:var(--c,var(--ink))}
+.chip .n{font-size:.72rem;opacity:.7}
+.chip[aria-pressed="true"]{background:var(--c,var(--ink));color:var(--ci,var(--bg));border-color:var(--c,var(--ink))}
+.chip[aria-pressed="true"] .dot{background:var(--ci,var(--bg))}
+.sec{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:20px 2px 10px}
+.sec h2{margin:0;font-family:var(--display);font-size:.98rem;font-weight:600}
+.sec span{font-size:.8rem;color:var(--muted)}
+.list{display:grid;gap:10px}
+.more{margin-top:10px;width:100%;border:2px dashed var(--line);background:none;border-radius:16px;padding:12px;font-weight:700;cursor:pointer;color:var(--ink)}
+.callout{margin-top:14px;padding:14px 16px;border-radius:16px;background:var(--soft);font-size:.88rem;display:grid;gap:8px}
+.callout b{font-size:.95rem}
+.linkbtn{border:0;background:none;padding:0;color:var(--hot);font-weight:700;cursor:pointer;text-align:left}
+
+/* tarjeta de descuento */
+.deal{display:grid;grid-template-columns:76px 1fr;align-items:stretch;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;cursor:pointer;text-align:left;width:100%;padding:0}
+.deal .pc{display:grid;place-items:center;align-content:center;gap:2px;background:var(--c);color:var(--ci);padding:10px 4px;text-align:center}
+.deal .pc b{font-family:var(--display);font-weight:800;font-size:1.3rem;line-height:1;font-variant-numeric:tabular-nums}
+.deal .pc b.sm{font-size:.82rem}
+.deal .pc small{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;opacity:.9}
+.deal .bd{padding:11px 13px;min-width:0;display:grid;gap:5px}
+.deal .top{display:flex;gap:9px;align-items:center;min-width:0}
+.deal .top span:last-child{min-width:0}
+.deal .h3{display:block;margin:0;font-size:.97rem;font-weight:700;line-height:1.28}
+.deal .who{font-size:.8rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--soft);display:inline-flex;align-items:center;gap:4px}
+.tag.hoy{background:var(--sun);color:#1a1530}
+.tag.ok{color:var(--ok);background:transparent;border:1.5px solid currentColor}
+.tag.chk{color:var(--warn);background:transparent;border:1.5px solid currentColor}
+.tag.zone{background:var(--ink);color:var(--bg)}
+.tag.mine{background:var(--hot);color:#fff}
+.mono{flex:none;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.68rem;letter-spacing:-.02em;background:var(--c);color:var(--ci)}
+.mono.lg{width:52px;height:52px;border-radius:16px;font-size:.95rem}
+.mono.sm{width:20px;height:20px;border-radius:6px;font-size:.5rem}
+.mono.img{background:#ffffff;padding:3px;box-shadow:inset 0 0 0 1px var(--line)}
+.mono img{width:100%;height:100%;object-fit:contain;display:block}
+
+/* Explorar */
+.search{display:flex;gap:8px;align-items:center;background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:4px 6px 4px 14px}
+.search svg{width:18px;height:18px;flex:none;fill:none;stroke:var(--muted);stroke-width:2.2;stroke-linecap:round}
+.search input{flex:1;min-width:0;border:0;background:transparent;padding:9px 0;outline:none}
+.search:focus-within{border-color:var(--ink)}
+.fbtn{border:0;background:var(--ink);color:var(--bg);border-radius:12px;padding:8px 12px;font-weight:700;font-size:.82rem;cursor:pointer;white-space:nowrap}
+.fbtn .n{background:var(--hot);color:#fff;border-radius:999px;padding:0 6px;margin-left:4px}
+.stores{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.store{position:relative;display:grid;gap:10px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:13px;cursor:pointer;overflow:hidden}
+.store::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c)}
+.store b{display:block;font-weight:700;font-size:.93rem;line-height:1.2;overflow-wrap:anywhere}
+.store small{display:block;color:var(--muted);font-size:.74rem}
+.store .row{display:flex;align-items:center;gap:9px;min-width:0}
+.store .row span:last-child{min-width:0}
+.store .ft{display:flex;justify-content:space-between;align-items:end;font-size:.76rem;color:var(--muted)}
+.store .best{font-family:var(--display);font-weight:800;font-size:.95rem;background:var(--c);color:var(--ci);padding:2px 8px;border-radius:9px}
+.shophead{display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;background:var(--c);color:var(--ci);margin-bottom:12px}
+.shophead .mono{background:var(--surface);color:var(--ink)}
+.shophead b{font-family:var(--display);font-size:1.02rem;display:block}
+.shophead span{min-width:0;flex:1}
+.shophead a{color:inherit;font-weight:700;font-size:.84rem;white-space:nowrap}
+.back{border:0;background:none;padding:0 0 10px;font-weight:700;color:var(--hot);cursor:pointer}
+.empty{padding:26px 16px;text-align:center;color:var(--muted);border:2px dashed var(--line);border-radius:18px}
+
+/* hojas (dialogs) */
+dialog{border:0;padding:0;background:var(--surface);color:var(--ink);width:min(560px,100%);max-height:92vh;border-radius:22px;overflow:auto}
+dialog::backdrop{background:rgba(15,13,26,.6)}
+@media (max-width:600px){dialog{margin:auto 0 0;border-radius:22px 22px 0 0;max-width:100%;padding-bottom:env(safe-area-inset-bottom,0px)}}
+.sheet{padding:18px 18px 20px;display:grid;gap:12px}
+.sheet h2{margin:0;font-family:var(--display);font-size:1.1rem;line-height:1.25}
+.sheet .x{position:relative;z-index:2;justify-self:end;border:0;background:var(--soft);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:1.1rem;margin-bottom:-40px}
+.big{display:flex;gap:14px;align-items:center;padding:14px;border-radius:18px;background:var(--c);color:var(--ci)}
+.big .mono:not(.img){background:var(--surface);color:var(--ink)}
+.big b{font-family:var(--display);font-size:2rem;line-height:1}
+.big span{font-size:.85rem;font-weight:600}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:7px 14px;font-size:.9rem;margin:0}
+.facts dt{color:var(--muted);font-weight:600}
+.facts dd{margin:0;min-width:0}
+.cond{font-size:.88rem;color:var(--muted);margin:0;background:var(--soft);padding:12px 14px;border-radius:14px}
+.calc{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.9rem;background:var(--soft);padding:10px 14px;border-radius:14px}
+.calc input{width:110px;border:1px solid var(--line);border-radius:10px;padding:7px 9px;background:var(--surface)}
+.calc output{font-weight:800;color:var(--ok)}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:0;border-radius:14px;padding:11px 16px;font-weight:700;cursor:pointer;background:var(--hot);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn.ghost{background:var(--soft);color:var(--ink)}
+.btn.dark{background:var(--ink);color:var(--bg)}
+.grid-dep{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.opt{border:2px solid var(--line);background:var(--surface);border-radius:14px;padding:10px;font-weight:700;font-size:.88rem;cursor:pointer;text-align:left;display:flex;align-items:center;gap:8px}
+.opt[aria-pressed="true"]{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,var(--surface))}
+.steps{display:flex;gap:6px}
+.steps i{height:5px;flex:1;border-radius:9px;background:var(--line)}
+.steps i.on{background:var(--hot)}
+.lead{margin:0;color:var(--muted);font-size:.92rem}
+.form{display:grid;gap:10px}
+.form label{display:grid;gap:4px;font-size:.8rem;font-weight:700;color:var(--muted)}
+.form input,.form select,.form textarea{border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--bg);min-width:0;width:100%}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dchk{display:flex;flex-wrap:wrap;gap:6px 12px}
+.dchk label{display:flex;flex-direction:row;align-items:center;gap:5px;color:var(--ink);font-size:.86rem}
+.dchk input{width:auto}
+.radio{display:grid;gap:8px}
+.radio label{display:flex;align-items:center;gap:8px;font-size:.92rem;padding:10px 12px;border:2px solid var(--line);border-radius:12px;cursor:pointer}
+.radio input{accent-color:var(--hot)}
+.radio label:has(input:checked){border-color:var(--hot)}
+
+/* Ajustes */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:4px 16px}
+.row-set{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);width:100%;background:none;border-left:0;border-right:0;border-top:0;text-align:left;cursor:pointer}
+.row-set:last-child{border-bottom:0}
+.row-set span{flex:1;min-width:0}
+.row-set b{display:block;font-size:.95rem}
+.row-set small{color:var(--muted);font-size:.82rem}
+.row-set .go{color:var(--muted);font-weight:800}
+.note{margin-top:16px;font-size:.82rem;color:var(--muted)}
+.rep{padding:12px 0;border-bottom:1px solid var(--line);font-size:.88rem;display:grid;gap:3px}
+.rep:last-child{border-bottom:0}
+.rep small{color:var(--muted)}
+.logorow{display:flex;align-items:center;gap:10px;padding-block:8px;border-bottom:1px solid var(--line)}
+.logorow .nm{flex:1;min-width:0;font-weight:600;font-size:.9rem}
+.upl{position:relative;font-size:.8rem;font-weight:700;padding:7px 12px;border-radius:999px;background:var(--soft);cursor:pointer;white-space:nowrap}
+.upl input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.rm{border:0;background:none;font-size:.8rem;color:var(--muted);text-decoration:underline;cursor:pointer;padding:0}
+#logoList{max-height:50vh;overflow-y:auto}
+
+.toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:700;font-size:.88rem;z-index:50;max-width:calc(100% - 32px)}
+@media (prefers-reduced-motion:no-preference){
+  .deal,.store{transition:transform .16s,box-shadow .16s}
+  .deal:hover,.store:hover{transform:translateY(-2px);box-shadow:0 10px 22px -14px var(--c)}
+  .list>*,.stores>*{animation:pop .3s both}
+  .list>*:nth-child(2){animation-delay:.03s}.list>*:nth-child(3){animation-delay:.06s}.list>*:nth-child(4){animation-delay:.09s}.list>*:nth-child(5){animation-delay:.12s}
+  @keyframes pop{from{transform:translateY(8px)}to{transform:none}}
+  .toast{animation:up .25s both}
+  @keyframes up{from{transform:translate(-50%,10px)}to{transform:translate(-50%,0)}}
+}
+</style>
+</head>
+<body>
+
+
+<header class="hero">
+  <div class="hero-in">
+    <h1><span class="pc">%</span><span>Rebaja<em>.uy</em></span></h1>
+    <div class="pills">
+      <button class="pill loc" id="pLoc" type="button"></button>
+      <button class="pill" id="pCards" type="button"></button>
+    </div>
+  </div>
+  <div class="stripe" id="stripe" aria-hidden="true"></div>
+</header>
+
+<main class="wrap">
+  <section class="view" id="vHoy" aria-label="Hoy"></section>
+  <section class="view" id="vExplorar" aria-label="Explorar" hidden></section>
+  <section class="view" id="vGuardados" aria-label="Guardados" hidden></section>
+  <section class="view" id="vAjustes" aria-label="Ajustes" hidden></section>
+</main>
+
+<nav class="tabs" aria-label="Secciones">
+  <div class="tabs-in" role="tablist">
+    <button class="tab" role="tab" data-tab="Hoy" aria-selected="true" type="button"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Hoy</button>
+    <button class="tab" role="tab" data-tab="Explorar" aria-selected="false" type="button"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>Explorar</button>
+    <button class="tab" role="tab" data-tab="Guardados" aria-selected="false" type="button"><svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>Guardados</button>
+    <button class="tab" role="tab" data-tab="Ajustes" aria-selected="false" type="button"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Mi perfil</button>
+  </div>
+</nav>
+
+<dialog id="dlg"><div class="sheet" id="sheet"></div></dialog>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+const DIAS=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+const CATS=["Todas","Supermercados","Gastronomía","Delivery","Combustible","Farmacias","Hogar y tecnología","Indumentaria","Compras online","Viajes y hotelería","Entretenimiento","Autos y gomerías","Ferretería y construcción","Ópticas","Mascotas","Salud y gimnasios","Educación y librerías","Transporte","Puntos y cashback","Impuestos"];
+const TIPOS=["Todos","Promo del comercio","Tarjeta / banco","App","Tienda online","Evento de ofertas","Programa de beneficios"];
+const DEPTOS=["Artigas","Canelones","Cerro Largo","Colonia","Durazno","Flores","Florida","Lavalleja","Maldonado","Montevideo","Paysandú","Río Negro","Rivera","Rocha","Salto","San José","Soriano","Tacuarembó","Treinta y Tres"];
+const MEDIOS=["Cualquier medio","Cualquier medio de pago","BROU","Itaú","Santander","Scotiabank","BBVA","HSBC","OCA","Creditel","Italmundo","Passcard","Prex","Mi Dinero","Mercado Pago","Débito (cualquier banco)","Tarjeta extranjera"];
+
+/* Comercios: nombre, categoría principal, web. alc:"locales" = cadena o local con sucursales en algunos departamentos; sin alc = vale en todo el país */
+const COMS={
+ "Tienda Inglesa":{alc:"locales",cat:"Supermercados",url:"https://www.tiendainglesa.com.uy"},
+ "Ta-Ta":{cat:"Supermercados",url:"https://www.tata.com.uy"},
+ "Disco / Devoto / Géant":{alc:"locales",cat:"Supermercados",url:"https://www.disco.com.uy"},
+ "Frog / Maxi Shop":{alc:"locales",cat:"Supermercados",url:"https://www.bbva.com.uy"},
+ "Farmashop":{alc:"locales",cat:"Farmacias",url:"https://tienda.farmashop.com.uy"},
+ "Hometech":{alc:"locales",cat:"Hogar y tecnología",url:"https://www.hometech.com.uy"},
+ "Mercado Libre":{cat:"Compras online",url:"https://www.mercadolibre.com.uy"},
+ "PedidosYa":{alc:"locales",cat:"Delivery",url:"https://www.pedidosya.com.uy"},
+ "Rappi":{alc:"locales",cat:"Delivery",url:"https://www.rappi.com.uy"},
+ "ANCAP":{cat:"Combustible",url:"https://www.ancap.com.uy"},
+ "Restaurantes adheridos":{cat:"Gastronomía",url:""},
+ "Supermercados adheridos":{cat:"Supermercados",url:""},
+ "Entretenimiento":{cat:"Entretenimiento",url:"https://www.redtickets.uy"},
+ "Comercios adheridos":{cat:"Indumentaria",url:""},
+ "Tiendas online (Ciberlunes)":{cat:"Compras online",url:"https://www.google.com/search?q=Ciberlunes+Uruguay"},
+ "Hoteles y turismo":{cat:"Viajes y hotelería",url:""},
+ "Gomerías Bridgestone (RASA)":{alc:"locales",cat:"Autos y gomerías",url:"https://rasa.com.uy"},
+ "RUA Asistencia":{alc:"locales",cat:"Autos y gomerías",url:"https://www.rua-asistencia.com.uy"},
+ "Sodimac":{alc:"locales",cat:"Ferretería y construcción",url:"https://www.sodimac.com.uy"},
+ "Barraca Malvín":{cat:"Ferretería y construcción",url:"https://beneficios.brou.com.uy/hogar/BarracaMalvin_Hogar"},
+ "Pintelux":{alc:"locales",cat:"Ferretería y construcción",url:"https://www.santander.com.uy/beneficios/pintelux"},
+ "Óptica Lombardi":{alc:"locales",cat:"Ópticas",url:"https://www.santander.com.uy/beneficios/optica-lombardi"},
+ "Óptica Meerhoff":{alc:"locales",cat:"Ópticas",url:"https://www.santander.com.uy/beneficios/optica-meerhoff"},
+ "Suóptica":{alc:"locales",cat:"Ópticas",url:"https://www.santander.com.uy/beneficios/suoptica"},
+ "Óptica Estela Jinchuk":{alc:"locales",cat:"Ópticas",url:"https://www.santander.com.uy/beneficios/optica-estela-jinchuk"},
+ "Ser Animal":{alc:"locales",cat:"Mascotas",url:"https://seranimal.com.uy"},
+ "Espacio Mascota":{cat:"Mascotas",url:"https://espaciomascota.com.uy"},
+ "Bigg":{alc:"locales",cat:"Salud y gimnasios",url:"https://www.santander.com.uy/beneficios/bigg"},
+ "Renart Libros":{alc:"locales",cat:"Educación y librerías",url:"https://www.santander.com.uy/beneficios/renart-libros"},
+ "Bookshop":{alc:"locales",cat:"Educación y librerías",url:"https://www.santander.com.uy/beneficios/bookshop"},
+ "Cabify":{cat:"Transporte",url:"https://beneficios.brou.com.uy/transporte/cabify"},
+ "Buquebus":{alc:"locales",cat:"Transporte",url:"https://www.santander.com.uy/beneficios/buquebus"},
+ "Comercios de frontera":{cat:"Supermercados",url:"https://www.gub.uy/ministerio-economia-finanzas/politicas-y-gestion/reduccion-del-imesi-naftas"},
+ "Estaciones de frontera":{cat:"Combustible",url:"https://www.gub.uy/ministerio-economia-finanzas/politicas-y-gestion/reduccion-del-imesi-naftas"},
+ "Tarjeta Joven":{cat:"Educación y librerías",url:"https://www.gub.uy/ministerio-desarrollo-social/tarjetajoven/beneficios"},
+ "Comercios del interior (BROU)":{cat:"Supermercados",url:"https://beneficios.brou.com.uy/hogar/beneficiosparavos"},
+ "Cualquier comercio":{cat:"Puntos y cashback",url:""}
+};
+
+/* Datos. verif:true = confirmado en fuente con fecha (src). dias:[] = todos los días */
+let BASE=[
+ // Tienda Inglesa
+ {id:"ti7",com:"Tienda Inglesa",tit:"Tienda Días jueves: 30% en fiambres y panes",ent:"Promo del comercio (Tienda Días)",tipo:"Promo del comercio",cat:"Supermercados",pct:30,medio:"Cualquier medio de pago",dias:[4],verif:true,src:"web Tienda Inglesa, oct 2026",cond:"Parte de Tienda Días (30% de lunes a viernes, un rubro por día). Fiambres cortados en mostrador y envasados, y panes de elaboración propia (francés, blando y rústico). Excluye quesos, chorizos secos, frankfurters, chorizos, morcillas y pan envasado. Sucursales, web y app. La web no indica topes ni fecha de fin.",url:"https://www.tiendainglesa.com.uy"},
+ {id:"ti8",com:"Tienda Inglesa",tit:"Tienda Días lunes: 30% en pollo y cerdo",ent:"Promo del comercio (Tienda Días)",tipo:"Promo del comercio",cat:"Supermercados",pct:30,medio:"Cualquier medio de pago",dias:[1],verif:true,src:"prensa feb 2026 (cronicas.com.uy, qm.com.uy)",cond:"No incluye congelados preelaborados, rotisería ni milanesas de pollo de elaboración propia. Sucursales, web y app. Dato de prensa de febrero de 2026; en octubre la web sigue mostrando el rubro del jueves, pero confirmá este día en la lista de la web.",url:"https://www.tiendainglesa.com.uy"},
+ {id:"ti9",com:"Tienda Inglesa",tit:"Tienda Días martes: 30% en frutas y verduras",ent:"Promo del comercio (Tienda Días)",tipo:"Promo del comercio",cat:"Supermercados",pct:30,medio:"Cualquier medio de pago",dias:[2],verif:true,src:"prensa feb 2026 (cronicas.com.uy, qm.com.uy)",cond:"No incluye congeladas, cubos de fruta, ensalada de frutas, jugos de máquina o de elaboración propia ni frutos secos. Sucursales, web y app. Dato de prensa de febrero de 2026: confirmá en la web.",url:"https://www.tiendainglesa.com.uy"},
+ {id:"ti10",com:"Tienda Inglesa",tit:"Tienda Días miércoles: 30% en pescados, mariscos y pastas frescas",ent:"Promo del comercio (Tienda Días)",tipo:"Promo del comercio",cat:"Supermercados",pct:30,medio:"Cualquier medio de pago",dias:[3],verif:true,src:"prensa feb 2026 (cronicas.com.uy, qm.com.uy)",cond:"Pescado fresco, mariscos congelados y pastas frescas. No incluye pastas al vacío ni de rotisería. Sucursales, web y app. Dato de prensa de febrero de 2026: confirmá en la web.",url:"https://www.tiendainglesa.com.uy"},
+ {id:"ti11",com:"Tienda Inglesa",tit:"Tienda Días viernes: 30% en pizzas y empanadas de rotisería",ent:"Promo del comercio (Tienda Días)",tipo:"Promo del comercio",cat:"Supermercados",pct:30,medio:"Cualquier medio de pago",dias:[5],verif:true,src:"prensa feb 2026 (cronicas.com.uy, qm.com.uy)",cond:"No incluye congelados. Sucursales, web y app. Dato de prensa de febrero de 2026: confirmá en la web.",url:"https://www.tiendainglesa.com.uy"},
+ {id:"ti5",com:"Tienda Inglesa",tit:"20% con tarjetas BBVA",ent:"BBVA crédito y débito",tipo:"Tarjeta / banco",cat:"Supermercados",pct:20,medio:"BBVA",dias:[],verif:true,src:"web BBVA, oct 2026 (vigente al 15/6/2027)",cond:"Clientes seleccionados, presentando cédula (en la web, con la cédula asociada al usuario). Tope $2.000 por cédula por mes. Excluye electrónica, electrodomésticos, cigarros, Tienda Deli, Barny's, productos de mailings y catálogos especiales, prepagas y tarjeta Fija. No acumulable.",url:"https://www.bbva.com.uy/personas/campanas/promocion-tienda-inglesa.html"},
+ {id:"ti1",com:"Tienda Inglesa",tit:"10% de lunes a viernes con Scotiabank (Save the week)",ent:"Scotiabank Club Card",tipo:"Tarjeta / banco",cat:"Supermercados",pct:10,medio:"Scotiabank",dias:[1,2,3,4,5],verif:true,src:"montevideo.com.uy feb 2026 + bases Tienda Inglesa ago–dic 2026",cond:"Visa Infinite, Visa Platinum, Amex Gold y Débito Premium Club Card. Solo en sucursales, en caja; no web ni app. No incluye tecnología ni electrodomésticos. No acumulable. Según las bases generales de descuentos Scotia (3/8 al 31/12/2026): tope mensual $6.000 por tarjeta preferencial, hay que estar adherido a PUNTOS, y no aplica en Tiendas Smart, Tienda Farma ni Barny's.",url:"https://www.tiendainglesa.com.uy/supermercado/landing/descuentos-scotia/731"},
+ {id:"ti6",com:"Tienda Inglesa",tit:"10% martes y jueves con BROU Recompensa",ent:"BROU Recompensa Mastercard crédito",tipo:"Tarjeta / banco",cat:"Supermercados",pct:10,medio:"BROU",dias:[2,4],verif:true,src:"web BROU, oct 2026 (vigente al 30/4/2027)",cond:"Tope $2.000 por mes por cuenta (compartido entre los supermercados adheridos). También BROU PYME Mastercard. Vale en caja y en la web del comercio, no pagando con Mercado Pago. Reintegro en el estado de cuenta. No aplica a corporativas.",url:"https://beneficios.brou.com.uy/medios_de_pago/credito/hogar/tienda-inglesa"},
+ {id:"ti3",com:"Tienda Inglesa",tit:"Hasta 18 cuotas sin recargo con Club Card Crédito",ent:"Scotiabank Club Card",tipo:"Tarjeta / banco",cat:"Hogar y tecnología",pct:null,medio:"Scotiabank",dias:[],verif:false,cond:"Se ofreció en productos seleccionados, en dólares, durante la mega liquidación de julio de 2026 (ya terminada) y figura en la página de Ciberlunes de Tienda Inglesa. Rige en eventos puntuales: confirmá antes de comprar.",url:"https://www.tiendainglesa.com.uy"},
+ {id:"ti4",com:"Tienda Inglesa",tit:"Especiales temáticos (Parrilla y Vinos, Vuelta a clases)",ent:"Promo del comercio",tipo:"Promo del comercio",cat:"Supermercados",pct:null,medio:"Cualquier medio de pago",dias:[],verif:false,cond:"Campañas por temporada con precios rebajados en rubros específicos. Ver folleto vigente.",url:"https://www.tiendainglesa.com.uy"},
+ // Ta-Ta
+ {id:"tt1",com:"Ta-Ta",tit:"10% todos los miércoles con Comunidad Plus",ent:"Tarjeta Comunidad Plus (BBVA Visa)",tipo:"Tarjeta / banco",cat:"Supermercados",pct:10,medio:"BBVA",dias:[3],verif:true,src:"web BBVA, oct 2026",cond:"También 10% los miércoles en Multi Ahorro Hogar (y 25% en BAS). BBVA indica que la oferta vale para el mes en curso y remite a cada beneficio por topes y condiciones.",url:"https://www.bbva.com.uy/personas/campanas/beneficios-bbva-comunidad-plus.html"},
+ {id:"tt4",com:"Ta-Ta",tit:"20% extra en Ofertata todos los días con Comunidad Plus",ent:"Tarjeta Comunidad Plus (BBVA Visa)",tipo:"Tarjeta / banco",cat:"Supermercados",pct:20,medio:"BBVA",dias:[],verif:true,src:"web BBVA, oct 2026",cond:"Solo en productos seleccionados de Ofertata. La web no indica topes: consultá el beneficio.",url:"https://www.bbva.com.uy/personas/campanas/beneficios-bbva-comunidad-plus.html"},
+ {id:"tt5",com:"Ta-Ta",tit:"10% martes y jueves con BROU Recompensa",ent:"BROU Recompensa Mastercard crédito",tipo:"Tarjeta / banco",cat:"Supermercados",pct:10,medio:"BROU",dias:[2,4],verif:true,src:"web BROU, oct 2026 (vigente al 30/4/2027)",cond:"Tope $2.000 por mes por cuenta, compartido con El Dorado, Macro Mercado, Micro Macro, Red Express y Tienda Inglesa. También BROU PYME Mastercard. En caja y en la web del comercio, no con Mercado Pago. No aplica a corporativas.",url:"https://beneficios.brou.com.uy/medios_de_pago/brou-recompensa/hogar/Recompensa-Supermercados"},
+ {id:"tt2",com:"Ta-Ta",tit:"25% en la primera compra con Comunidad Plus",ent:"Tarjeta Comunidad Plus (BBVA Visa)",tipo:"Tarjeta / banco",cat:"Supermercados",pct:25,medio:"BBVA",dias:[],verif:true,src:"web BBVA, oct 2026",cond:"Una sola vez, de bienvenida. También en BAS y Multi Ahorro Hogar.",url:"https://www.bbva.com.uy/personas/campanas/beneficios-bbva-comunidad-plus.html"},
+ {id:"tt3",com:"Ta-Ta",tit:"Envío gratis los miércoles en tata.com.uy",ent:"Tarjeta Comunidad Plus (BBVA Visa)",tipo:"Tienda online",cat:"Supermercados",pct:null,medio:"BBVA",dias:[3],verif:false,cond:"Dato de noviembre de 2024 (compras online mayores a $2.000). En octubre de 2026 ya no figura en la web de BBVA: confirmá antes de comprar.",url:"https://www.tata.com.uy"},
+ // Hometech
+ {id:"ht1",com:"Hometech",tit:"18% (equivale al IVA) los viernes con Comunidad Plus",ent:"Tarjeta Comunidad Plus (BBVA Visa)",tipo:"Tarjeta / banco",cat:"Hogar y tecnología",pct:18,medio:"BBVA",dias:[5],verif:true,src:"web BBVA, oct 2026",cond:"18,03% (IVA off) en productos Hometech en Ta-Ta y Multi Ahorro Hogar. La web no indica topes.",url:"https://www.hometech.com.uy"},
+ // Farmashop
+ {id:"fs4",com:"Farmashop",tit:"25% martes, jueves y domingos en categorías seleccionadas",ent:"Farmacard Débito Santander",tipo:"Tarjeta / banco",cat:"Farmacias",pct:25,medio:"Santander",dias:[0,2,4],verif:true,src:"web Farmashop y Santander, oct 2026",cond:"Solo categorías seleccionadas (por ejemplo, Jueves de Limpieza y Jueves de Medicamentos). El domingo, en local es solo para mayores de 60; en web y app, para todos. No se indican topes.",url:"https://tienda.farmashop.com.uy/farmacard-santander"},
+ {id:"fs5",com:"Farmashop",tit:"15% martes, jueves y domingos con tarjetas Santander",ent:"Tarjetas Santander",tipo:"Tarjeta / banco",cat:"Farmacias",pct:15,medio:"Santander",dias:[0,2,4],verif:true,src:"web Santander, oct 2026",cond:"Para tarjetas Santander que no son Farmacard. La web de Santander no indica topes ni vigencia y no detalla si es en categorías seleccionadas: confirmá en Farmashop.",url:"https://www.santander.com.uy/beneficios"},
+ {id:"fs1",com:"Farmashop",tit:"10% todos los días con Farmacard Santander",ent:"Cuenta Plus Farmashop (Santander)",tipo:"Tarjeta / banco",cat:"Farmacias",pct:10,medio:"Santander",dias:[],verif:true,src:"web Farmashop y Santander, oct 2026",cond:"En todos los productos Farmashop. Suma Farmapuntos y la rebaja de 2 puntos de IVA por débito.",url:"https://tienda.farmashop.com.uy/farmacard-santander"},
+ {id:"fs2",com:"Farmashop",tit:"Farmapuntos en cada compra",ent:"Programa Farmacard",tipo:"Programa de beneficios",cat:"Puntos y cashback",pct:null,medio:"Cualquier medio de pago",dias:[],verif:true,src:"dic 2025",cond:"Acumulás puntos canjeables. Bases en farmashop.com.uy.",url:"https://tienda.farmashop.com.uy"},
+ {id:"fs3",com:"Farmashop",tit:"Ofertas por tiempo limitado en la tienda online",ent:"Promo del comercio",tipo:"Tienda online",cat:"Farmacias",pct:null,medio:"Cualquier medio de pago",dias:[],verif:false,cond:"Promos de marcas y fines de semana temáticos (cosmética, bebés). Ver sección Ofertas.",url:"https://tienda.farmashop.com.uy"},
+ // Disco / Devoto / Géant
+ {id:"dd2",com:"Disco / Devoto / Géant",tit:"Feria de Pastas: 20% a 40% todos los jueves",ent:"Promo del comercio",tipo:"Promo del comercio",cat:"Supermercados",pct:null,medio:"Cualquier medio de pago",dias:[4],verif:true,src:"web Disco y Géant, oct 2026",cond:"Ravioles, lasañas, canelones y salsas, con 20%, 30% o 40% según el producto. La web no indica banco ni fecha de fin.",url:"https://www.disco.com.uy"},
+ {id:"dd3",com:"Disco / Devoto / Géant",tit:"10% a 25% en productos seleccionados con tarjetas Santander",ent:"Santander (HiperMás)",tipo:"Tarjeta / banco",cat:"Supermercados",pct:null,medio:"Santander",dias:[],verif:true,src:"web Disco y Géant, oct 2026",cond:"El % depende del producto: 20% en Canasta de Ahorro (1 al 15/10/2026), 10% en Imprecionantes (1/9 al 1/11/2026), 15% en vinos (hasta 13/10) y 25% en muebles de jardín. Mirá la etiqueta Santander en cada producto.",url:"https://www.disco.com.uy"},
+ {id:"dd4",com:"Disco / Devoto / Géant",tit:"Aniversario Géant: ofertas hasta el 25 de octubre",ent:"Evento propio de Géant",tipo:"Evento de ofertas",cat:"Supermercados",pct:null,medio:"Cualquier medio de pago",dias:[],verif:true,src:"web Géant, oct 2026",cond:"Del 24/9 al 25/10/2026. Envío gratis en compras mayores a $10.000. La web no indica un % general.",url:"https://www.geant.com.uy"},
+ {id:"dd1",com:"Disco / Devoto / Géant",tit:"Ofertas semanales y descuentos por día con bancos",ent:"Promo del comercio",tipo:"Promo del comercio",cat:"Supermercados",pct:null,medio:"Cualquier medio de pago",dias:[],verif:false,cond:"Cada cadena publica ofertas semanales en su web y app (Canasta de Ahorro, Semana del Congelado) y descuentos según banco.",url:"https://www.disco.com.uy"},
+ // Frog
+ {id:"fr1",com:"Frog / Maxi Shop",tit:"Tarjeta propia con beneficios en Frog y Maxi Shop",ent:"Tarjeta BBVA de la cadena",tipo:"Tarjeta / banco",cat:"Supermercados",pct:null,medio:"BBVA",dias:[],verif:false,cond:"Al lanzarse en 2019, BBVA anunció 5% todos los días en Frog y suma de puntos. No se encontró información actual: consultá antes de usarla.",url:"https://www.bbva.com.uy"},
+ // Mercado Libre
+ {id:"ml1",com:"Mercado Libre",tit:"Cyberfest y eventos de descuentos",ent:"Evento propio",tipo:"Evento de ofertas",cat:"Compras online",pct:null,medio:"Cualquier medio de pago",dias:[],verif:false,cond:"Mercado Libre hace eventos de ofertas varias veces al año. Fuera de esas fechas, revisá Ofertas del día y Descuentazos.",url:"https://www.mercadolibre.com.uy/ofertas"},
+ {id:"ml2",com:"Mercado Libre",tit:"Ofertas del día y cuotas sin interés",ent:"Tienda online",tipo:"Tienda online",cat:"Compras online",pct:null,medio:"Cualquier medio de pago",dias:[],verif:false,cond:"Cuotas sin interés según banco y vendedor. Se indica en cada publicación.",url:"https://www.mercadolibre.com.uy/ofertas"},
+ {id:"ml3",com:"Mercado Libre",tit:"Descuentos pagando con Mercado Pago",ent:"Mercado Pago",tipo:"App",cat:"Compras online",pct:null,medio:"Mercado Pago",dias:[],verif:false,cond:"Promos de Mercado Pago en Uruguay varían por mes. Revisá la sección Promociones de la app.",url:"https://www.mercadopago.com.uy"},
+ // PedidosYa
+ {id:"py1",com:"PedidosYa",tit:"PedidosYa Plus: envíos gratis ilimitados",ent:"Suscripción PedidosYa",tipo:"App",cat:"Delivery",pct:null,medio:"Cualquier medio de pago",dias:[],verif:true,src:"El Observador, jun 2025",cond:"$349 por mes al lanzamiento (2/6/2025); confirmá el precio actual. Envío gratis en locales con ícono Plus; en Market, farmacias y súper, desde $700. Incluye descuentos exclusivos.",url:"https://www.pedidosya.com.uy"},
+ {id:"py2",com:"PedidosYa",tit:"Primer mes de Plus gratis y 3 meses al 50% con Santander",ent:"Santander",tipo:"Tarjeta / banco",cat:"Delivery",pct:50,medio:"Santander",dias:[],verif:false,cond:"Promo de lanzamiento (prensa de junio de 2025) para tarjetas de crédito Santander. No se encontró confirmación actual.",url:"https://www.pedidosya.com.uy"},
+ {id:"py3",com:"PedidosYa",tit:"15% martes y jueves con Mastercard (20% con Plus)",ent:"Mastercard",tipo:"Tarjeta / banco",cat:"Delivery",pct:15,medio:"Cualquier medio de pago",dias:[2,4],verif:false,cond:"Dato de prensa de junio de 2025 (El Observador): 15% para todos y 20% para suscriptores Plus, con tope de hasta $3.000 por pedido. Confirmá en la app si sigue vigente.",url:"https://www.pedidosya.com.uy"},
+ // Rappi
+ {id:"rp1",com:"Rappi",tit:"Descuentos en restaurantes con tarjetas del banco",ent:"Scotiabank y otros",tipo:"App",cat:"Delivery",pct:null,medio:"Scotiabank",dias:[],verif:false,cond:"Bancos han tenido promos en Rappi para Montevideo y Punta del Este. Ver la app.",url:"https://www.rappi.com.uy"},
+ // ANCAP
+ {id:"an1",com:"ANCAP",tit:"5% en combustible lunes y viernes con BROU Recompensa",ent:"BROU Recompensa Mastercard",tipo:"Tarjeta / banco",cat:"Combustible",pct:5,medio:"BROU",dias:[1,5],verif:true,src:"web BROU, oct 2026 (vigente al 30/4/2027)",cond:"Tope de reintegro $500 por mes por cuenta. Crédito BROU Recompensa por POS. No aplica a corporativas.",url:"https://www.brou.com.uy/brou-recompensa"},
+ // Gastronomía / genéricos
+ {id:"rs1",com:"Restaurantes adheridos",tit:"Descuentos en restaurantes por día",ent:"Santander, BBVA, Itaú, OCA, BROU",tipo:"Tarjeta / banco",cat:"Gastronomía",pct:null,medio:"Cualquier medio",dias:[],verif:false,cond:"Casi todos los bancos tienen restaurantes adheridos por día. El % suele subir con el nivel de la tarjeta (Oro, Platinum, Black).",url:"https://beneficios.brou.com.uy"},
+ {id:"cm1",com:"Comercios adheridos",tit:"Beneficios en más de 300 comercios aliados",ent:"Comunidad Plus (BBVA)",tipo:"Tarjeta / banco",cat:"Indumentaria",pct:null,medio:"BBVA",dias:[],verif:true,src:"web BBVA, oct 2026",cond:"Descuentos todos los días en comercios adheridos de distintos rubros, más Puntos BBVA.",url:"https://www.bbva.com.uy/personas/campanas/beneficios-bbva-comunidad-plus.html"},
+ {id:"cm2",com:"Comercios adheridos",tit:"Beneficios en más de 200 comercios",ent:"Cuenta Plus Farmashop (Santander)",tipo:"Tarjeta / banco",cat:"Indumentaria",pct:null,medio:"Santander",dias:[],verif:true,src:"dic 2025",cond:"Listado en la web de Santander.",url:"https://www.santander.com.uy"},
+ {id:"cl1",com:"Tiendas online (Ciberlunes)",tit:"Ciberlunes: ofertas online de muchas tiendas uruguayas",ent:"Evento (junio y noviembre)",tipo:"Evento de ofertas",cat:"Compras online",pct:70,medio:"Cualquier medio de pago",dias:[1],verif:false,cond:"La edición de noviembre de 2025 fue del 3 al 5/11, con más de 110 marcas y descuentos de hasta 70%. Hay ediciones en junio y noviembre y siempre empieza un lunes; la fecha de noviembre de 2026 no está confirmada.",url:"https://www.google.com/search?q=Ciberlunes+Uruguay"},
+ {id:"ht2",com:"Hoteles y turismo",tit:"Devolución de IVA para turistas extranjeros",ent:"Tax Free / DGI",tipo:"Programa de beneficios",cat:"Viajes y hotelería",pct:null,medio:"Tarjeta extranjera",dias:[],verif:false,cond:"Turistas no residentes pagando con tarjeta extranjera en restaurantes, hoteles y servicios. Ver temporada vigente.",url:"https://www.gub.uy/ministerio-turismo"},
+ {id:"up1",com:"Hoteles y turismo",tit:"UruguayPass: descuentos en restaurantes, hoteles y paseos",ent:"Tarjeta de ventajas",tipo:"Programa de beneficios",cat:"Viajes y hotelería",pct:null,medio:"Cualquier medio de pago",dias:[],verif:false,cond:"Carnet de descuentos para turistas y residentes.",url:"https://www.google.com/search?q=UruguayPass"},
+ {id:"im1",com:"Supermercados adheridos",tit:"Hasta 30% en supermercados los martes con Italmundo",ent:"Italmundo (Líder Plata 15%, Oro 20%, Platino 25%, Platino ++ 30%)",tipo:"Tarjeta / banco",cat:"Supermercados",pct:30,medio:"Italmundo",dias:[2],verif:true,src:"comparador, ago 2026",cond:"El % depende del nivel de la tarjeta. Dato de un comparador de tarjetas: confirmá con Italmundo qué supermercados aplican.",url:"https://www.tarjetasdecredito.com.uy/tarjetas-con-descuentos"},
+ {id:"im2",com:"ANCAP",tit:"Hasta 25% en combustible los miércoles con Italmundo",ent:"Italmundo (Plata 10%, Oro 15%, Platino 20%, Platino ++ 25%)",tipo:"Tarjeta / banco",cat:"Combustible",pct:25,medio:"Italmundo",dias:[3],verif:true,src:"comparador, ago 2026",cond:"El % depende del nivel de la tarjeta. Dato de un comparador de tarjetas: confirmá estaciones adheridas.",url:"https://www.tarjetasdecredito.com.uy/tarjetas-con-descuentos"},
+ {id:"pc1",com:"Supermercados adheridos",tit:"10% en supermercados y farmacias del 28 al 30 de cada mes",ent:"Passcard Experta",tipo:"Tarjeta / banco",cat:"Supermercados",pct:10,medio:"Passcard",dias:[],verif:true,src:"comparador, ago 2026",cond:"Solo los días 28, 29 y 30 de cada mes en comercios adheridos. Otros días tiene descuentos en heladerías, telepeaje, cines y más. Dato de un comparador de tarjetas.",url:"https://www.tarjetasdecredito.com.uy/tarjetas-con-descuentos"},
+ {id:"pc2",com:"Entretenimiento",tit:"25% en RedTickets y cine gratis al mes (18 a 29 años)",ent:"Passcard Like",tipo:"Tarjeta / banco",cat:"Entretenimiento",pct:25,medio:"Passcard",dias:[],verif:true,src:"comparador, ago 2026",cond:"Solo para jóvenes de 18 a 29 años. También 50% en heladerías y telepeaje. Dato de un comparador de tarjetas.",url:"https://www.tarjetasdecredito.com.uy/tarjetas-con-descuentos"},
+ // Autos y gomerías
+ {id:"au1",com:"Gomerías Bridgestone (RASA)",tit:"Neumáticos Bridgestone con descuento pagando con Itaú",ent:"Itaú + Bridgestone",tipo:"Tarjeta / banco",cat:"Autos y gomerías",pct:null,medio:"Itaú",dias:[],verif:false,cond:"Promo 2026 de Itaú con Bridgestone en RASA y locales adheridos (rasa.com.uy/itau2026 y neumaticos25off.com). No se pudo leer el detalle: el nombre del sitio sugiere 25%. Confirmá %, tarjetas y gomerías antes de ir.",url:"https://rasa.com.uy/itau2026/"},
+ {id:"au2",com:"RUA Asistencia",tit:"30% en servicios de asistencia vehicular",ent:"Todas las tarjetas BROU",tipo:"Tarjeta / banco",cat:"Autos y gomerías",pct:30,medio:"BROU",dias:[],verif:true,src:"web BROU, oct 2026 (ficha de 2017)",cond:"Vale con todas las tarjetas BROU, sujeto a la vigencia del convenio. La ficha no detalla qué servicios incluye (auxilio, grúa): consultá al 2904 0660.",url:"https://beneficios.brou.com.uy/transporte/rua_Transporte"},
+ // Ferretería y construcción
+ {id:"fe1",com:"Sodimac",tit:"20% con tarjetas de crédito OCA (hasta el 12/10)",ent:"OCA Visa y Mastercard",tipo:"Tarjeta / banco",cat:"Ferretería y construcción",pct:20,medio:"OCA",dias:[],verif:true,src:"web Sodimac, oct 2026",cond:"Del 5 al 12 de octubre de 2026. Tope de reintegro $3.000, en el estado de cuenta. Hasta 6 cuotas sin interés con Visa y 12 con Mastercard.",url:"https://www.sodimac.com.uy/sodimac-uy/content/Medios_de_pago/"},
+ {id:"fe2",com:"Sodimac",tit:"20% + 15% extra con la tarjeta BBVA Sodimac (nuevos clientes, hasta el 12/10)",ent:"Tarjeta de crédito BBVA Sodimac",tipo:"Tarjeta / banco",cat:"Ferretería y construcción",pct:20,medio:"BBVA",dias:[],verif:true,src:"web Sodimac, oct 2026",cond:"Del 5 al 12 de octubre de 2026, para nuevos titulares. 20% con tope $3.200 y 15% extra con tope $1.500. Hasta 12 cuotas sin interés en pesos y 18 en dólares.",url:"https://www.sodimac.com.uy/sodimac-uy/content/Medios_de_pago/"},
+ {id:"fe3",deptos:["Montevideo"],com:"Barraca Malvín",tit:"20% en terminaciones, sanitaria y grifería",ent:"Todas las tarjetas BROU",tipo:"Tarjeta / banco",cat:"Ferretería y construcción",pct:20,medio:"BROU",dias:[],verif:true,src:"web BROU, oct 2026",cond:"Materiales de terminación, sanitaria, grifería y equipamiento para baño, cocina y jardín. Descuento en caja. La ficha no indica topes ni vigencia. Av. Estanislao López 4849, Montevideo.",url:"https://beneficios.brou.com.uy/hogar/BarracaMalvin_Hogar"},
+ {id:"fe4",com:"Pintelux",tit:"15% todos los días en pinturas",ent:"Santander (Puntos Soy)",tipo:"Tarjeta / banco",cat:"Ferretería y construcción",pct:15,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"La web no indica topes ni vigencia.",url:"https://www.santander.com.uy/beneficios/pintelux"},
+ // Ópticas
+ {id:"op1",com:"Óptica Lombardi",tit:"15% todos los días",ent:"Santander (Puntos Soy)",tipo:"Tarjeta / banco",cat:"Ópticas",pct:15,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"La web no indica topes ni vigencia.",url:"https://www.santander.com.uy/beneficios/optica-lombardi"},
+ {id:"op2",com:"Óptica Meerhoff",tit:"15% todos los días",ent:"Santander (Puntos Soy)",tipo:"Tarjeta / banco",cat:"Ópticas",pct:15,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"La web no indica topes ni vigencia.",url:"https://www.santander.com.uy/beneficios/optica-meerhoff"},
+ {id:"op3",com:"Suóptica",tit:"15% todos los días",ent:"Santander",tipo:"Tarjeta / banco",cat:"Ópticas",pct:15,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"La web no indica tarjetas, topes ni vigencia.",url:"https://www.santander.com.uy/beneficios/suoptica"},
+ {id:"op4",com:"Óptica Estela Jinchuk",tit:"15% todos los días",ent:"Santander (Puntos Soy)",tipo:"Tarjeta / banco",cat:"Ópticas",pct:15,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"La web no indica topes ni vigencia.",url:"https://www.santander.com.uy/beneficios/optica-estela-jinchuk"},
+ // Mascotas
+ {id:"mp1",com:"Ser Animal",tit:"Hasta 25% con tarjetas BROU",ent:"BROU (25% Platino y Black; 15% el resto)",tipo:"Tarjeta / banco",cat:"Mascotas",pct:25,medio:"BROU",dias:[],verif:true,src:"web BROU, oct 2026 (vigente al 31/3/2027)",cond:"25% con crédito BROU VISA Platino y Recompensa Black. 15% con débito y con crédito Internacional y Oro. Tope de reintegro $2.000 por mes por cuenta.",url:"https://beneficios.brou.com.uy/transporte/ser-animal"},
+ {id:"mp2",com:"Espacio Mascota",tit:"10% en productos para mascotas",ent:"Tarjetas BROU",tipo:"Tarjeta / banco",cat:"Mascotas",pct:10,medio:"BROU",dias:[],verif:true,src:"web BROU, oct 2026 (vigente al 30/11/2026)",cond:"Visa crédito y débito, BROU Recompensa y MI BROU. Socios suman 5% más. No incluye veterinaria, peluquería ni cuotas de socio. Orinoco 4911 y online.",url:"https://beneficios.brou.com.uy/hogar/espacio-mascota"},
+ // Salud y gimnasios
+ {id:"gy1",com:"Bigg",tit:"Hasta 25% en la cuota del gimnasio",ent:"Santander (25% Select, 15% crédito)",tipo:"Tarjeta / banco",cat:"Salud y gimnasios",pct:25,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"Plan mensual ilimitado con débito automático en tarjeta Santander: 25% con Select y 15% con crédito. La web no indica vigencia.",url:"https://www.santander.com.uy/beneficios/bigg"},
+ // Educación y librerías
+ {id:"lb1",com:"Renart Libros",tit:"15% todos los días",ent:"Santander (Puntos Soy)",tipo:"Tarjeta / banco",cat:"Educación y librerías",pct:15,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"La web no indica topes ni vigencia.",url:"https://www.santander.com.uy/beneficios/renart-libros"},
+ {id:"lb2",com:"Bookshop",tit:"15% todos los días",ent:"Santander (Puntos Soy)",tipo:"Tarjeta / banco",cat:"Educación y librerías",pct:15,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"La web no indica topes ni vigencia.",url:"https://www.santander.com.uy/beneficios/bookshop"},
+ // Transporte
+ {id:"tr1",deptos:["Montevideo","Maldonado"],com:"Cabify",tit:"30% en viajes con el código BROUOCT30",ent:"Tarjetas BROU",tipo:"Tarjeta / banco",cat:"Transporte",pct:30,medio:"BROU",dias:[],verif:true,src:"web BROU, oct 2026 (hasta 31/10/2026)",cond:"Montevideo y Maldonado. Cargá el código en la app y pagá con Visa BROU, Recompensa o MI BROU. Hasta 4 viajes por mes, tope $100 por viaje. No acumulable.",url:"https://beneficios.brou.com.uy/transporte/cabify"},
+ {id:"tr2",com:"Buquebus",tit:"10% en paquetes a Argentina y 12 cuotas sin recargo",ent:"Todas las tarjetas Santander",tipo:"Tarjeta / banco",cat:"Transporte",pct:10,medio:"Santander",dias:[],verif:true,src:"web Santander, oct 2026",cond:"La web no indica topes ni vigencia.",url:"https://www.santander.com.uy/beneficios/buquebus"},
+ // Frontera (medidas del Gobierno)
+ {id:"fx1",deptos:["Artigas","Cerro Largo","Rivera","Rocha"],com:"Comercios de frontera",tit:"IVA reducido pagando con débito en supermercados, farmacias y ferias",ent:"Ley 20.419 (medidas de frontera con Brasil)",tipo:"Programa de beneficios",cat:"Supermercados",pct:null,medio:"Débito (cualquier banco)",dias:[],verif:true,src:"montevideo.com.uy, dic 2025",cond:"Comercios a menos de 20 km de Chuy, Río Branco, Aceguá, Rivera, Artigas o Bella Unión. Se devuelve el 100% del IVA mínimo y la tasa básica baja a la mitad, pagando con débito. Rige desde el 1/12/2025 y es transitorio: confirmá que siga vigente.",url:"https://www.gub.uy/ministerio-economia-finanzas/politicas-y-gestion/reduccion-del-imesi-naftas"},
+ {id:"fx2",deptos:["Artigas","Cerro Largo","Rivera","Rocha"],com:"Estaciones de frontera",tit:"Hasta 32% menos en nafta Súper 95 (frontera con Brasil)",ent:"Rebaja de IMESI (MEF)",tipo:"Programa de beneficios",cat:"Combustible",pct:32,medio:"Cualquier medio de pago",dias:[],verif:true,src:"web MEF, oct 2026",cond:"Estaciones a menos de 20 km de Chuy, Río Branco, Aceguá, Rivera, Artigas y Bella Unión; entre 20 y 60 km, la mitad. Pago presencial con medio electrónico local (no efectivo), consumidor final. Hasta 50 litros por carga y 600 UI por mes por persona.",url:"https://www.gub.uy/ministerio-economia-finanzas/politicas-y-gestion/reduccion-del-imesi-naftas"},
+ {id:"fx3",deptos:["Río Negro","Paysandú","Salto"],com:"Estaciones de frontera",tit:"Hasta 22% menos en nafta Súper 95 (litoral con Argentina)",ent:"Rebaja de IMESI (MEF)",tipo:"Programa de beneficios",cat:"Combustible",pct:22,medio:"Cualquier medio de pago",dias:[],verif:true,src:"web MEF, oct 2026",cond:"Estaciones a menos de 20 km de los puentes Fray Bentos–Puerto Unzué, Paysandú–Colón y Salto–Concordia; entre 20 y 60 km, la mitad. Pago presencial con medio electrónico local (no efectivo). Hasta 50 litros por carga y 600 UI por mes por persona.",url:"https://www.gub.uy/ministerio-economia-finanzas/politicas-y-gestion/reduccion-del-imesi-naftas"},
+ // Tarjeta Joven
+ {id:"tj1",com:"Tarjeta Joven",tit:"Descuentos para jóvenes en ópticas, educación, calzado, librerías y más",ent:"Tarjeta Joven (MIDES)",tipo:"Programa de beneficios",cat:"Educación y librerías",pct:null,medio:"Cualquier medio de pago",dias:[],verif:true,src:"gub.uy, oct 2026",cond:"Ejemplos: 25% en Óptica Suiza (lentes), 30% en Instituto Dickens, hasta 15% en planes de ANTEL, 10% en Stadium. Cada comercio indica sus locales: buscá los de tu departamento en la web.",url:"https://www.gub.uy/ministerio-desarrollo-social/tarjetajoven/beneficios"},
+ // Interior: Artigas, Cerro Largo, Rivera y Rocha
+ {id:"in1",deptos:["Artigas","Cerro Largo","Rivera","Rocha"],com:"Comercios del interior (BROU)",tit:"30% en supermercados, almacenes y carnicerías (lunes y miércoles)",ent:"BROU Recompensa Mastercard crédito",tipo:"Tarjeta / banco",cat:"Supermercados",pct:30,medio:"BROU",dias:[1,3],verif:true,src:"web BROU, oct 2026 (vigente al 31/12/2026)",cond:"Solo en Artigas, Cerro Largo, Rivera y Rocha, en comercios adheridos. Tope $3.000 por mes. No aplica a corporativas.",url:"https://beneficios.brou.com.uy/hogar/beneficiosparavos"},
+ {id:"in2",deptos:["Artigas","Cerro Largo","Rivera","Rocha"],com:"Comercios del interior (BROU)",tit:"30% en farmacias (martes y jueves)",ent:"BROU Recompensa Mastercard crédito",tipo:"Tarjeta / banco",cat:"Farmacias",pct:30,medio:"BROU",dias:[2,4],verif:true,src:"web BROU, oct 2026 (vigente al 31/12/2026)",cond:"Solo en Artigas, Cerro Largo, Rivera y Rocha. Tope $3.000 por mes. No vale pagando por POS Handy ni Mercado Pago.",url:"https://beneficios.brou.com.uy/hogar/beneficiosparavos"},
+ {id:"in3",deptos:["Artigas","Cerro Largo","Rivera","Rocha"],com:"Comercios del interior (BROU)",tit:"10% en ópticas, ropa y calzado (viernes)",ent:"BROU Recompensa Mastercard crédito",tipo:"Tarjeta / banco",cat:"Ópticas",pct:10,medio:"BROU",dias:[5],verif:true,src:"web BROU, oct 2026 (vigente al 31/12/2026)",cond:"Solo en Artigas, Cerro Largo, Rivera y Rocha. Tope $2.000 por mes.",url:"https://beneficios.brou.com.uy/hogar/beneficiosparavos"},
+ {id:"br2",com:"Cualquier comercio",tit:"BROU Recompensa: 1 punto cada $100 = $1",ent:"BROU Recompensa",tipo:"Programa de beneficios",cat:"Puntos y cashback",pct:1,medio:"BROU",dias:[],verif:true,src:"web BROU, oct 2026",cond:"Suman compras y débitos automáticos. Las prepagas no acumulan.",url:"https://www.brou.com.uy/brou-recompensa"},
+ {id:"it1",com:"Cualquier comercio",tit:"Itaú Volar: millas por tus compras",ent:"Itaú",tipo:"Programa de beneficios",cat:"Puntos y cashback",pct:null,medio:"Itaú",dias:[],verif:false,cond:"Acumulás millas canjeables por pasajes.",url:"https://www.itau.com.uy"},
+ {id:"af1",com:"Cualquier comercio",tit:"Ahorra Fácil: reintegro por productos de marcas adheridas",ent:"App",tipo:"App",cat:"Puntos y cashback",pct:null,medio:"Cualquier medio de pago",dias:[],verif:false,cond:"Comprás en cualquier comercio, subís el ticket y al llegar a $100 te transfieren el ahorro.",url:"https://www.google.com/search?q=Ahorra+F%C3%A1cil+Uruguay"},
+ {id:"px1",com:"Cualquier comercio",tit:"Reintegros pagando con Prex",ent:"Prex",tipo:"App",cat:"Puntos y cashback",pct:null,medio:"Prex",dias:[],verif:false,cond:"Promos mensuales en la app.",url:"https://www.prex.com.uy"},
+ {id:"iva",com:"Cualquier comercio",tit:"2 puntos menos de IVA pagando con débito",ent:"Ley 19.210 de Inclusión Financiera",tipo:"Programa de beneficios",cat:"Impuestos",pct:2,medio:"Débito (cualquier banco)",dias:[],verif:true,src:"dic 2025",cond:"Rebaja automática en compras con débito o dinero electrónico.",url:"https://www.dgi.gub.uy"}
+];
+
+/* ---------- estado local ---------- */
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let mine=LS.get("rebaja_mine",[]).map(d=>({...d,com:d.com||d.ent,deptos:d.deptos||[]}));
+let favs=new Set(LS.get("rebaja_favs",[]));
+let myCards=new Set(LS.get("rebaja_cards",[]));
+let logos=LS.get("rebaja_logos",{});
+const st={tab:"Hoy",depto:LS.get("rebaja_depto","todos"),off:0,hoyCat:"Todas",showAll:false,
+  ex:{q:"",cat:"Todas",com:null,tipo:"Todos",medio:"Cualquier medio",dia:"todos",zona:false,ok:false,mias:true}};
+if(st.depto!=="todos"&&!DEPTOS.includes(st.depto))st.depto="todos";
+const hoy=new Date().getDay();
+const DIAS_L=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+const GENERIC_PAY=["Cualquier medio de pago","Cualquier medio","Débito (cualquier banco)"];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- colores y distintivos ---------- */
+const COL={"Supermercados":["#f2542d","#fff"],"Gastronomía":["#e23a8a","#fff"],"Delivery":["#ff9f1c","#1a1530"],"Combustible":["#2b59ff","#fff"],"Farmacias":["#00a88f","#fff"],"Hogar y tecnología":["#7a3cff","#fff"],"Indumentaria":["#ff6fb5","#1a1530"],"Compras online":["#ffd23f","#1a1530"],"Viajes y hotelería":["#00b4d8","#1a1530"],"Entretenimiento":["#8ac926","#1a1530"],"Puntos y cashback":["#3d348b","#fff"],"Impuestos":["#577590","#fff"],"Autos y gomerías":["#1d3557","#fff"],"Ferretería y construcción":["#bc6c25","#fff"],"Ópticas":["#06d6a0","#1a1530"],"Mascotas":["#c77dff","#1a1530"],"Salud y gimnasios":["#118ab2","#fff"],"Educación y librerías":["#e9c46a","#1a1530"],"Transporte":["#264653","#fff"]};
+const PAL=Object.values(COL);
+const cv=cat=>{const c=COL[cat]||["#1a1530","#fff"];return `--c:${c[0]};--ci:${c[1]}`};
+const hv=name=>{let h=0;for(const ch of name)h=(h*31+ch.charCodeAt(0))>>>0;const c=PAL[h%PAL.length];return `--c:${c[0]};--ci:${c[1]}`};
+const comCat=(n,f)=>COMS[n]?.cat||f;
+const initials=n=>String(n).replace(/[()]/g,"").split(/[\s\/-]+/).filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase();
+function mono(name,cls="",style=""){
+  if(logos[name])return `<span class="mono img ${cls}"><img src="${logos[name]}" alt=""></span>`;
+  return `<span class="mono ${cls}" style="${style||hv(name)}" aria-hidden="true">${esc(initials(name))}</span>`;
+}
+$("stripe").innerHTML=PAL.map(c=>`<i style="background:${c[0]}"></i>`).join("");
+
+/* ---------- reglas de negocio ---------- */
+const all=()=>[...mine,...BASE];
+const validOn=(d,day)=>!d.dias||!d.dias.length||d.dias.includes(day);
+const inZone=d=>st.depto==="todos"||!d.deptos||!d.deptos.length||d.deptos.includes(st.depto);
+const isLocal=d=>st.depto!=="todos"&&d.deptos&&d.deptos.includes(st.depto);
+const usable=d=>!myCards.size||myCards.has(d.medio)||GENERIC_PAY.includes(d.medio);
+const score=d=>(d.pct||6)*(d.verif||d.mio?1:.55)+(isLocal(d)?6:0)+(d.mio?3:0);
+const byScore=(a,b)=>score(b)-score(a);
+function where(d){
+  if(d.deptos&&d.deptos.length)return {k:"zone",t:d.deptos.length>2?`${d.deptos.slice(0,2).join(", ")} y ${d.deptos.length-2} más`:"Solo en "+d.deptos.join(" y ")};
+  if(COMS[d.com]?.alc==="locales")return {k:"",t:"Según sucursal"};
+  return {k:"",t:"Todo el país"};
+}
+const daysTxt=d=>!d.dias||!d.dias.length?"Todos los días":d.dias.length===5&&[1,2,3,4,5].every(x=>d.dias.includes(x))?"Lunes a viernes":d.dias.map(i=>DIAS_L[i]).join(", ").replace(/^./,c=>c.toUpperCase());
+const statusTag=d=>d.mio?`<span class="tag mine">Agregado por vos</span>`:d.verif?`<span class="tag ok">Confirmado</span>`:`<span class="tag chk">Confirmar antes de ir</span>`;
+function pcBlock(d){
+  if(d.pct==null||d.pct==="")return `<b class="sm">Ver<br>detalle</b>`;
+  const lbl=d.tipo==="Evento de ofertas"?"hasta":d.cat==="Puntos y cashback"?"vuelve":d.cat==="Impuestos"?"menos IVA":"de descuento";
+  return `<b>${d.pct}%</b><small>${lbl}</small>`;
+}
+function dealCard(d,day){
+  const today=validOn(d,day??hoy)&&(day==null||day===hoy);
+  const w=where(d);
+  return `<button type="button" class="deal" data-deal="${esc(d.id)}" style="${cv(d.cat)}">
+    <span class="pc">${pcBlock(d)}</span>
+    <span class="bd">
+      <span class="top">${mono(d.com,"",cv(comCat(d.com,d.cat)))}<span><span class="h3">${esc(d.tit)}</span><span class="who">${esc(d.com)} · ${esc(d.medio==="Cualquier medio de pago"?"Cualquier medio":d.medio)}</span></span></span>
+      <span class="meta">${today?'<span class="tag hoy">Vale hoy</span>':`<span class="tag">${esc(daysTxt(d))}</span>`}<span class="tag ${w.k}">${esc(w.t)}</span>${statusTag(d)}${favs.has(d.id)?'<span class="tag">★ Guardado</span>':""}</span>
+    </span></button>`;
+}
+const findDeal=id=>all().find(d=>d.id===id);
+
+/* ---------- cabecera ---------- */
+function renderPills(){
+  $("pLoc").textContent=st.depto==="todos"?"Todo Uruguay ▾":st.depto+" ▾";
+  $("pCards").textContent=myCards.size?`Mis tarjetas (${myCards.size})`:"Mis tarjetas";
+}
+$("pLoc").addEventListener("click",()=>openDepto());
+$("pCards").addEventListener("click",()=>openCards());
+
+/* ---------- pestaña Hoy ---------- */
+function renderHoy(){
+  const day=(hoy+st.off)%7;
+  const strip=[...Array(7)].map((_,i)=>{const dd=(hoy+i)%7;const n=all().filter(d=>inZone(d)&&validOn(d,dd)&&usable(d)).length;
+    return `<button type="button" class="day" data-off="${i}" aria-pressed="${i===st.off}"><b>${i===0?"Hoy":i===1?"Mañana":DIAS_L[dd].slice(0,3).replace(/^./,c=>c.toUpperCase())}</b><small>${n} promos</small></button>`}).join("");
+  const base=all().filter(d=>inZone(d)&&validOn(d,day));
+  const yours=base.filter(usable),others=base.filter(d=>!usable(d));
+  const cats={};yours.forEach(d=>cats[d.cat]=(cats[d.cat]||0)+1);
+  if(st.hoyCat!=="Todas"&&!cats[st.hoyCat])st.hoyCat="Todas";
+  const catChips=`<button type="button" class="chip" data-hcat="Todas" aria-pressed="${st.hoyCat==="Todas"}">Todo <span class="n">${yours.length}</span></button>`+
+    Object.keys(cats).sort((a,b)=>cats[b]-cats[a]).map(c=>`<button type="button" class="chip" data-hcat="${esc(c)}" style="${cv(c)}" aria-pressed="${st.hoyCat===c}"><span class="dot"></span>${esc(c)} <span class="n">${cats[c]}</span></button>`).join("");
+  const list=yours.filter(d=>st.hoyCat==="Todas"||d.cat===st.hoyCat).sort(byScore);
+  const shown=st.showAll?list:list.slice(0,8);
+  const local=yours.filter(isLocal).length;
+  const dayName=st.off===0?`Hoy ${DIAS_L[day]}`:st.off===1?`Mañana ${DIAS_L[day]}`:`El ${DIAS_L[day]}`;
+  const place=st.depto==="todos"?"todo Uruguay":st.depto;
+  let h=`<div class="days" role="group" aria-label="Elegí el día">${strip}</div>
+    <h2 class="greet">${esc(dayName)} en <em>${esc(place)}</em></h2>
+    <p class="sub">${yours.length} ${yours.length===1?"descuento":"descuentos"} ${myCards.size?"que podés usar con lo que tenés":"para usar"}${local?` · ${local} ${local===1?"es":"son"} solo de tu zona`:""}.</p>
+    <div class="chips" role="group" aria-label="Rubros">${catChips}</div>
+    <div class="sec"><h2>${st.hoyCat==="Todas"?"Lo mejor del día":esc(st.hoyCat)}</h2><span>De mayor a menor ahorro</span></div>`;
+  h+=shown.length?`<div class="list">${shown.map(d=>dealCard(d,day)).join("")}</div>`:`<div class="empty">No hay descuentos para este día con tus filtros.<br>Probá otro día o mirá en Explorar.</div>`;
+  if(list.length>shown.length)h+=`<button type="button" class="more" id="moreBtn">Ver los ${list.length} descuentos</button>`;
+  if(!myCards.size)h+=`<div class="callout"><b>Mostrá solo lo que podés usar</b><span>Contanos qué tarjetas y apps tenés y ordenamos el día para vos. No pedimos números de tarjeta.</span><button type="button" class="linkbtn" data-open="cards">Elegir mis tarjetas →</button></div>`;
+  else if(others.length){
+    const top=others.sort(byScore).slice(0,3);
+    h+=`<div class="sec"><h2>Con otras tarjetas</h2><span>${others.length} más este día</span></div><div class="list">${top.map(d=>dealCard(d,day)).join("")}</div>`;
+  }
+  if(st.depto==="todos")h+=`<div class="callout"><b>¿Dónde estás?</b><span>Elegí tu departamento para ver también los descuentos de tu zona, como los de frontera o del interior.</span><button type="button" class="linkbtn" data-open="depto">Elegir departamento →</button></div>`;
+  $("vHoy").innerHTML=h;
+}
+$("vHoy").addEventListener("click",e=>{
+  const dy=e.target.closest("[data-off]");if(dy){st.off=+dy.dataset.off;st.showAll=false;renderHoy();return}
+  const c=e.target.closest("[data-hcat]");if(c){st.hoyCat=c.dataset.hcat;st.showAll=false;renderHoy();return}
+  if(e.target.closest("#moreBtn")){st.showAll=true;renderHoy();return}
+});
+
+/* ---------- pestaña Explorar ---------- */
+const exActive=()=>{const x=st.ex;return (x.tipo!=="Todos")+(x.medio!=="Cualquier medio")+(x.dia!=="todos")+x.zona+x.ok};
+function exFilter(ignoreCom){
+  const x=st.ex,q=x.q.trim().toLowerCase();
+  return all().filter(d=>{
+    if(!inZone(d))return false;
+    if(!ignoreCom&&x.com&&d.com!==x.com)return false;
+    if(x.cat!=="Todas"&&d.cat!==x.cat&&comCat(d.com,"")!==x.cat)return false;
+    if(x.tipo!=="Todos"&&d.tipo!==x.tipo)return false;
+    if(x.medio!=="Cualquier medio"&&d.medio!==x.medio)return false;
+    if(x.dia!=="todos"&&!validOn(d,+x.dia))return false;
+    if(x.zona&&!isLocal(d))return false;
+    if(x.ok&&!(d.verif||d.mio))return false;
+    if(x.mias&&myCards.size&&!usable(d))return false;
+    if(q&&!(d.com+" "+d.tit+" "+d.ent+" "+d.cat+" "+d.medio+" "+(d.cond||"")).toLowerCase().includes(q))return false;
+    return true});
+}
+function renderExplorar(keepFocus){
+  const x=st.ex;
+  const cats={};exFilter(true).forEach(d=>{const c=d.cat;cats[c]=(cats[c]||0)+1});
+  let h=`<div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="q" type="search" placeholder="Buscá un comercio, banco o producto" value="${esc(x.q)}" aria-label="Buscar"><button type="button" class="fbtn" id="fBtn">Filtros${exActive()?`<span class="n">${exActive()}</span>`:""}</button></div>
+  <div class="chips" style="margin-top:12px" role="group" aria-label="Rubros"><button type="button" class="chip" data-xcat="Todas" aria-pressed="${x.cat==="Todas"}">Todos</button>${CATS.slice(1).filter(c=>cats[c]).map(c=>`<button type="button" class="chip" data-xcat="${esc(c)}" style="${cv(c)}" aria-pressed="${x.cat===c}"><span class="dot"></span>${esc(c)} <span class="n">${cats[c]}</span></button>`).join("")}</div>`;
+  if(myCards.size)h+=`<p class="sub" style="margin-top:4px">${x.mias?`Mostrando solo lo que podés usar con tus tarjetas. <button type="button" class="linkbtn" data-mias="0">Ver todo</button>`:`Mostrando todos los medios de pago. <button type="button" class="linkbtn" data-mias="1">Solo mis tarjetas</button>`}</p>`;
+  const browsing=!x.q.trim()&&!x.com&&!exActive();
+  if(x.com){
+    const r=exFilter(false).sort(byScore),cat=comCat(x.com,r[0]?.cat);
+    h+=`<div style="margin-top:10px"><button type="button" class="back" data-com="">← Todos los comercios</button><div class="shophead" style="${cv(cat)}">${mono(x.com,"lg",cv(cat))}<span><b>${esc(x.com)}</b><small>${esc(cat)} · ${r.length} ${r.length===1?"descuento":"descuentos"}</small></span>${COMS[x.com]?.url?`<a href="${esc(COMS[x.com].url)}" target="_blank" rel="noopener">Ir al sitio ↗</a>`:""}</div>
+      ${r.length?`<div class="list">${r.map(d=>dealCard(d)).join("")}</div>`:`<div class="empty">No hay descuentos de este comercio con tus filtros.</div>`}</div>`;
+  }else if(browsing){
+    const g={};exFilter(true).forEach(d=>(g[d.com]=g[d.com]||[]).push(d));
+    const names=Object.keys(g).sort((a,b)=>Math.max(0,...g[b].map(d=>d.pct||0))-Math.max(0,...g[a].map(d=>d.pct||0)));
+    h+=`<div class="sec"><h2>Comercios</h2><span>${names.length} con descuentos</span></div>`;
+    h+=names.length?`<div class="stores">${names.map(n=>{const ds=g[n],best=Math.max(0,...ds.map(d=>d.pct||0)),nh=ds.filter(d=>validOn(d,hoy)).length,cat=comCat(n,ds[0].cat);
+      return `<button type="button" class="store" data-com="${esc(n)}" style="${cv(cat)}"><span class="row">${mono(n,"",cv(cat))}<span><b>${esc(n)}</b><small>${esc(cat)}</small></span></span><span class="ft"><span>${ds.length} ${ds.length===1?"promo":"promos"}${nh?` · ${nh} hoy`:""}</span>${best?`<span class="best">${best}%</span>`:""}</span></button>`}).join("")}</div>`:`<div class="empty">No hay comercios con estos filtros.</div>`;
+  }else{
+    const r=exFilter(false).sort(byScore);
+    h+=`<div class="sec"><h2>Resultados</h2><span>${r.length} ${r.length===1?"descuento":"descuentos"}</span></div>`;
+    h+=r.length?`<div class="list">${r.map(d=>dealCard(d)).join("")}</div>`:`<div class="empty">No encontramos descuentos.<br>Probá con otra palabra o quitá filtros.</div>`;
+  }
+  $("vExplorar").innerHTML=h;
+  if(keepFocus){const i=$("q");i.focus();i.setSelectionRange(i.value.length,i.value.length)}
+}
+$("vExplorar").addEventListener("input",e=>{if(e.target.id==="q"){st.ex.q=e.target.value;st.ex.com=null;renderExplorar(true)}});
+$("vExplorar").addEventListener("click",e=>{
+  const c=e.target.closest("[data-xcat]");if(c){st.ex.cat=c.dataset.xcat;st.ex.com=null;renderExplorar();return}
+  const s=e.target.closest("[data-com]");if(s){st.ex.com=s.dataset.com||null;renderExplorar();window.scrollTo({top:0});return}
+  const m=e.target.closest("[data-mias]");if(m){st.ex.mias=m.dataset.mias==="1";renderExplorar();return}
+  if(e.target.closest("#fBtn"))openFilters();
+});
+
+/* ---------- pestaña Guardados ---------- */
+function renderGuardados(){
+  const f=all().filter(d=>favs.has(d.id)).sort(byScore);
+  let h=`<h2 class="greet" style="margin-top:0">Guardados</h2><p class="sub">Tus descuentos favoritos y los que agregaste vos.</p>`;
+  h+=f.length?`<div class="list">${f.map(d=>dealCard(d)).join("")}</div>`:`<div class="empty">Todavía no guardaste descuentos.<br>Abrí uno y tocá <b>Guardar</b>.</div>`;
+  h+=`<div class="sec"><h2>Agregados por vos</h2><span>${mine.length}</span></div>`;
+  h+=mine.length?`<div class="list">${mine.map(d=>dealCard(d)).join("")}</div>`:"";
+  h+=`<button type="button" class="more" data-open="add">+ Agregar un descuento que conozcas</button>`;
+  $("vGuardados").innerHTML=h;
+}
+
+/* ---------- pestaña Mi perfil ---------- */
+let reportsCount=null;
+function renderAjustes(){
+  const row=(open,title,sub)=>`<button type="button" class="row-set" data-open="${open}"><span><b>${title}</b><small>${sub}</small></span><span class="go">›</span></button>`;
+  let h=`<h2 class="greet" style="margin-top:0">Mi perfil</h2><p class="sub">Esto se guarda solo en este dispositivo.</p><div class="card">`+
+    row("depto","Mi departamento",st.depto==="todos"?"Todo Uruguay":esc(st.depto))+
+    row("cards","Mis tarjetas y apps",myCards.size?esc([...myCards].join(", ")):"Ninguna elegida: ves todos los descuentos")+
+    row("add","Agregar un descuento","Cargá una promo que conozcas")+
+    row("logos","Logos","Subí los logos de los comercios")+
+    row("help","Cómo funciona","Qué significa cada etiqueta")+
+    row("welcome","Ver la bienvenida otra vez","Volvé a elegir departamento y tarjetas")+
+    (reportsCount!=null?row("reports","Reportes recibidos",`${reportsCount} ${reportsCount===1?"aviso":"avisos"} de usuarios (solo lo ves vos)`):"")+
+    `</div><p class="note">Datos revisados el <b>${REV}</b>. Se actualizan todas las semanas. Los descuentos tienen topes, días y stock: confirmá en el comercio o en tu banco antes de pagar.</p>`;
+  $("vAjustes").innerHTML=h;
+}
+document.addEventListener("click",e=>{
+  const o=e.target.closest("[data-open]");if(!o)return;
+  ({depto:openDepto,cards:openCards,add:openAdd,logos:openLogos,help:openHelp,welcome:()=>openWelcome(1),reports:openReports})[o.dataset.open]?.();
+});
+
+/* ---------- navegación ---------- */
+function setTab(t){
+  st.tab=t;document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===t));
+  ["Hoy","Explorar","Guardados","Ajustes"].forEach(v=>$("v"+v).hidden=v!==t);
+  renderAll();window.scrollTo({top:0});
+}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));
+function renderAll(){renderPills();({Hoy:renderHoy,Explorar:renderExplorar,Guardados:renderGuardados,Ajustes:renderAjustes})[st.tab]()}
+document.querySelector("main").addEventListener("click",e=>{const d=e.target.closest("[data-deal]");if(d)openDeal(d.dataset.deal)});
+
+/* ---------- hojas ---------- */
+const dlg=$("dlg"),sheet=$("sheet");
+function openSheet(html){sheet.innerHTML=`<button type="button" class="x" data-close aria-label="Cerrar">×</button>`+html;if(!dlg.open)dlg.showModal();sheet.scrollTop=0}
+function closeSheet(){if(dlg.open)dlg.close()}
+dlg.addEventListener("click",e=>{if(e.target===dlg||e.target.closest("[data-close]"))closeSheet()});
+dlg.addEventListener("close",()=>renderAll());
+let toastT;function toast(m){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2600)}
+
+function openDeal(id){
+  const d=findDeal(id);if(!d)return;const w=where(d);
+  openSheet(`<div class="big" style="${cv(d.cat)}">${mono(d.com,"lg",cv(comCat(d.com,d.cat)))}<div>${d.pct!=null&&d.pct!==""?`<b>${d.pct}%</b>`:""}<span style="display:block">${esc(d.com)}</span></div></div>
+    <h2>${esc(d.tit)}</h2>
+    <div class="meta">${validOn(d,hoy)?'<span class="tag hoy">Vale hoy</span>':""}${statusTag(d)}</div>
+    <dl class="facts"><dt>Cuándo</dt><dd>${esc(daysTxt(d))}</dd><dt>Dónde</dt><dd>${esc(w.t)}</dd><dt>Cómo pagar</dt><dd>${esc(d.medio)}${d.ent&&d.ent!==d.medio?` · ${esc(d.ent)}`:""}</dd><dt>Rubro</dt><dd>${esc(d.cat)}</dd>${d.src?`<dt>Fuente</dt><dd>${esc(d.src)}</dd>`:""}</dl>
+    ${d.cond?`<p class="cond">${esc(d.cond)}</p>`:""}
+    ${d.pct?`<div class="calc"><label for="calcIn">Si gastás $</label><input id="calcIn" type="number" inputmode="numeric" min="0" placeholder="2000"><span>ahorrás</span><output id="calcOut">—</output></div><small style="color:var(--muted)">Cálculo aproximado: revisá el tope en las condiciones.</small>`:""}
+    <div class="acts">${d.url?`<a class="btn dark" href="${esc(d.url)}" target="_blank" rel="noopener">Ver en la web ↗</a>`:""}<button type="button" class="btn ghost" id="favBtn">${favs.has(d.id)?"★ Guardado":"☆ Guardar"}</button>${d.mio?`<button type="button" class="btn ghost" id="delBtn">Eliminar</button>`:`<button type="button" class="btn ghost" id="repBtn">Reportar un error</button>`}</div>
+    ${!st.ex.com||st.ex.com!==d.com?`<button type="button" class="linkbtn" id="moreCom">Ver todos los descuentos de ${esc(d.com)} →</button>`:""}`);
+  const ci=$("calcIn");if(ci)ci.addEventListener("input",()=>{const v=+ci.value;$("calcOut").textContent=v>0?"$"+Math.round(v*d.pct/100).toLocaleString("es-UY"):"—"});
+  $("favBtn").onclick=()=>{favs.has(d.id)?favs.delete(d.id):favs.add(d.id);LS.set("rebaja_favs",[...favs]);$("favBtn").textContent=favs.has(d.id)?"★ Guardado":"☆ Guardar";toast(favs.has(d.id)?"Guardado en tus favoritos":"Quitado de favoritos")};
+  if($("delBtn"))$("delBtn").onclick=()=>{mine=mine.filter(x=>x.id!==d.id);LS.set("rebaja_mine",mine);closeSheet();toast("Descuento eliminado")};
+  if($("repBtn"))$("repBtn").onclick=()=>openReport(d);
+  if($("moreCom"))$("moreCom").onclick=()=>{st.ex.com=d.com;st.ex.q="";closeSheet();setTab("Explorar")};
+}
+
+function openDepto(){
+  openSheet(`<h2>¿En qué departamento estás?</h2><p class="lead">Vas a ver los descuentos de todo el país más los exclusivos de tu zona.</p>
+    <div class="grid-dep">${["todos",...DEPTOS].map(d=>`<button type="button" class="opt" data-dep="${esc(d)}" aria-pressed="${st.depto===d}">${d==="todos"?"Todo Uruguay":esc(d)}</button>`).join("")}</div>`);
+  sheet.querySelectorAll("[data-dep]").forEach(b=>b.onclick=()=>{st.depto=b.dataset.dep;LS.set("rebaja_depto",st.depto);closeSheet();toast(st.depto==="todos"?"Mostrando todo Uruguay":"Mostrando descuentos para "+st.depto)});
+}
+const CARD_OPTS=()=>MEDIOS.filter(m=>m!=="Cualquier medio"&&!GENERIC_PAY.includes(m));
+function cardsGrid(){return `<div class="grid-dep">${CARD_OPTS().map(m=>`<button type="button" class="opt" data-card="${esc(m)}" aria-pressed="${myCards.has(m)}">${mono(m,"sm",hv(m))}${esc(m)}</button>`).join("")}</div>`}
+function bindCards(){sheet.querySelectorAll("[data-card]").forEach(b=>b.onclick=()=>{const m=b.dataset.card;myCards.has(m)?myCards.delete(m):myCards.add(m);LS.set("rebaja_cards",[...myCards]);b.setAttribute("aria-pressed",myCards.has(m))})}
+function openCards(){
+  openSheet(`<h2>¿Qué tarjetas y apps usás?</h2><p class="lead">Marcá bancos, tarjetas y billeteras. Te mostramos primero lo que podés usar. No pedimos números de tarjeta.</p>${cardsGrid()}<div class="acts"><button type="button" class="btn" data-close>Listo</button><button type="button" class="btn ghost" id="clrCards">Desmarcar todo</button></div>`);
+  bindCards();$("clrCards").onclick=()=>{myCards.clear();LS.set("rebaja_cards",[]);sheet.querySelectorAll("[data-card]").forEach(b=>b.setAttribute("aria-pressed","false"))};
+}
+function openFilters(){
+  const x=st.ex,sel=(id,opts,val)=>`<select id="${id}">${opts.map(([v,t])=>`<option value="${esc(v)}" ${v===val?"selected":""}>${esc(t)}</option>`).join("")}</select>`;
+  openSheet(`<h2>Filtros</h2><div class="form">
+    <label>Tipo de descuento${sel("fxTipo",TIPOS.map(t=>[t,t==="Todos"?"Todos los tipos":t]),x.tipo)}</label>
+    <label>Banco o medio de pago${sel("fxMedio",MEDIOS.map(m=>[m,m==="Cualquier medio"?"Todos":m]),x.medio)}</label>
+    <label>Día${sel("fxDia",[["todos","Cualquier día"],...DIAS_L.map((d,i)=>[String(i),d.replace(/^./,c=>c.toUpperCase())])],x.dia)}</label>
+    <div class="radio"><label><input type="checkbox" id="fxZona" ${x.zona?"checked":""}> Solo descuentos exclusivos de mi departamento</label><label><input type="checkbox" id="fxOk" ${x.ok?"checked":""}> Solo descuentos confirmados</label></div>
+    <div class="acts"><button type="button" class="btn" id="fxApply">Ver resultados</button><button type="button" class="btn ghost" id="fxClear">Limpiar</button></div></div>`);
+  $("fxApply").onclick=()=>{Object.assign(st.ex,{tipo:$("fxTipo").value,medio:$("fxMedio").value,dia:$("fxDia").value,zona:$("fxZona").checked,ok:$("fxOk").checked,com:null});closeSheet()};
+  $("fxClear").onclick=()=>{Object.assign(st.ex,{tipo:"Todos",medio:"Cualquier medio",dia:"todos",zona:false,ok:false});closeSheet()};
+}
+function openAdd(){
+  const o=a=>a.map(v=>`<option>${esc(v)}</option>`).join("");
+  openSheet(`<h2>Agregar un descuento</h2><p class="lead">Queda guardado solo en este dispositivo.</p><form class="form" id="addForm">
+    <label>¿Qué descuento es?<input id="aTit" required placeholder="20% en carnes los martes"></label>
+    <div class="grid2"><label>Comercio<input id="aCom" required list="comList" placeholder="Carnicería Don José"></label><label>% de descuento<input id="aPct" type="number" min="0" max="100" placeholder="20"></label></div>
+    <datalist id="comList">${Object.keys(COMS).map(c=>`<option value="${esc(c)}">`).join("")}</datalist>
+    <div class="grid2"><label>Rubro<select id="aCat">${o(CATS.slice(1))}</select></label><label>Departamento<select id="aDep"><option value="todos">Todo el país</option>${o(DEPTOS)}</select></label></div>
+    <label>Cómo se paga<select id="aMedio">${o(MEDIOS.slice(1))}</select></label>
+    <div><span style="font-size:.8rem;font-weight:700;color:var(--muted)">Días (si no marcás ninguno, vale todos los días)</span><div class="dchk">${DIAS_L.map((d,i)=>`<label><input type="checkbox" value="${i}">${d.slice(0,3)}</label>`).join("")}</div></div>
+    <label>Condiciones<textarea id="aCond" rows="2" placeholder="Tope $500, solo con débito"></textarea></label>
+    <label>Enlace (opcional)<input id="aUrl" type="url" placeholder="https://"></label>
+    <div class="acts"><button class="btn" type="submit">Guardar descuento</button></div></form>`);
+  if(st.depto!=="todos")$("aDep").value=st.depto;
+  $("addForm").onsubmit=e=>{e.preventDefault();const p=$("aPct").value;
+    mine.unshift({id:"u"+Date.now(),com:$("aCom").value.trim(),ent:"Agregado por vos",tit:$("aTit").value.trim(),pct:p===""?null:+p,cat:$("aCat").value,medio:$("aMedio").value,tipo:"Promo del comercio",
+      deptos:$("aDep").value==="todos"?[]:[$("aDep").value],dias:[...sheet.querySelectorAll(".dchk input:checked")].map(i=>+i.value),cond:$("aCond").value.trim(),url:$("aUrl").value.trim(),mio:true});
+    LS.set("rebaja_mine",mine);closeSheet();toast("Descuento agregado")};
+}
+function openHelp(){
+  openSheet(`<h2>Cómo funciona</h2><dl class="facts">
+    <dt><span class="tag hoy">Vale hoy</span></dt><dd>Podés usarlo hoy.</dd>
+    <dt><span class="tag ok">Confirmado</span></dt><dd>Lo verificamos en la web del banco, del comercio o del Gobierno. En el detalle ves la fuente y la fecha.</dd>
+    <dt><span class="tag chk">Confirmar antes de ir</span></dt><dd>Es una promo habitual pero no encontramos datos actuales. Revisá el enlace antes de pagar.</dd>
+    <dt><span class="tag zone">Solo en…</span></dt><dd>Vale únicamente en esos departamentos.</dd>
+    <dt><span class="tag">Según sucursal</span></dt><dd>Es de una cadena: fijate si hay un local en tu zona.</dd></dl>
+    <p class="lead">Los descuentos se revisan todas las semanas. Si ves uno mal, abrilo y tocá <b>Reportar un error</b>. Los distintivos con iniciales no son logos oficiales.</p>`);
+}
+function openWelcome(step){
+  const steps=`<div class="steps"><i class="on"></i><i class="${step>1?"on":""}"></i></div>`;
+  if(step===1){
+    sheet.innerHTML="";openSheet(`${steps}<h2>Hola, te ayudamos a ahorrar todos los días</h2><p class="lead">Juntamos descuentos de bancos, tarjetas, apps, comercios y del Gobierno en todo Uruguay. Primero, ¿dónde estás?</p>
+      <div class="grid-dep">${DEPTOS.map(d=>`<button type="button" class="opt" data-wdep="${esc(d)}" aria-pressed="${st.depto===d}">${esc(d)}</button>`).join("")}</div><button type="button" class="linkbtn" data-wdep="todos">Prefiero ver todo Uruguay</button>`);
+    sheet.querySelectorAll("[data-wdep]").forEach(b=>b.onclick=()=>{st.depto=b.dataset.wdep;LS.set("rebaja_depto",st.depto);openWelcome(2)});
+  }else{
+    openSheet(`${steps}<h2>¿Qué tarjetas y apps usás?</h2><p class="lead">Marcá todas las que tengas. Si no querés elegir ahora, seguí igual.</p>${cardsGrid()}<div class="acts"><button type="button" class="btn" id="wDone">Ver mis descuentos de hoy</button></div>`);
+    bindCards();$("wDone").onclick=()=>{LS.set("rebaja_onb",1);closeSheet();setTab("Hoy")};
+  }
+}
+
+/* ---------- logos ---------- */
+function openLogos(){
+  const coms=Object.keys(COMS).filter(n=>COMS[n].url!==""||n.indexOf("adherid")<0).filter(n=>!/adheridos|Cualquier|frontera|interior|turismo|Ciberlunes|^Entretenimiento$/.test(n)).sort((a,b)=>a.localeCompare(b));
+  const meds=CARD_OPTS();let i=0;
+  const row=n=>{const k=i++;return `<div class="logorow">${mono(n)}<span class="nm">${esc(n)}</span>${logos[n]?`<button type="button" class="rm" data-rm="${esc(n)}">Quitar</button>`:""}<label class="upl" for="lg${k}">${logos[n]?"Cambiar":"Subir logo"}<input type="file" id="lg${k}" accept="image/png,image/jpeg,image/svg+xml,image/webp" data-logo="${esc(n)}"></label></div>`};
+  openSheet(`<h2>Logos</h2><p class="lead">Subí el logo de cada marca (por ejemplo, del kit de prensa). Se guarda solo en este dispositivo. Para publicar la app con logos, pedí permiso a cada marca.</p><div id="logoList">${coms.map(row).join("")}${meds.map(row).join("")}</div>`);
+  $("logoList").onchange=e=>{const f=e.target.files&&e.target.files[0];if(f&&e.target.dataset.logo)saveLogo(e.target.dataset.logo,f)};
+  $("logoList").onclick=e=>{const b=e.target.closest("[data-rm]");if(!b)return;delete logos[b.dataset.rm];LS.set("rebaja_logos",logos);openLogos()};
+}
+function saveLogo(name,file){
+  const fr=new FileReader();fr.onload=()=>{const img=new Image();img.onload=()=>{
+    const S=128,c=document.createElement("canvas");c.width=c.height=S;const x=c.getContext("2d");const w=img.naturalWidth||S,h=img.naturalHeight||S,r=Math.min(S/w,S/h);
+    x.drawImage(img,(S-w*r)/2,(S-h*r)/2,w*r,h*r);let url;try{url=c.toDataURL("image/png")}catch(e){url=fr.result}
+    logos[name]=url;try{localStorage.setItem("rebaja_logos",JSON.stringify(logos));toast("Logo guardado")}catch(e){toast("Se ve el logo, pero no se pudo guardar")}openLogos()};
+    img.onerror=()=>toast("No se pudo leer esa imagen");img.src=fr.result};fr.readAsDataURL(file);
+}
+
+/* ---------- reportes (Supabase) ---------- */
+const SB_URL="https://mrogllwrherfyjpzgvly.supabase.co";
+const SB_KEY="sb_publishable_5T0j9FvyB4mIicx39H4caA_wj3IXsxs";
+let REV="9 de octubre de 2026";
+const REASONS=["Ya no existe o venció","Cambió el porcentaje, los días o el tope","No aplica en mi departamento","Otro problema"];
+function openReport(d){
+  openSheet(`<h2>¿Qué está mal?</h2><p class="lead">${esc(d.com)}: ${esc(d.tit)}</p><form class="form" id="repForm"><div class="radio">${REASONS.map((r,i)=>`<label><input type="radio" name="mot" value="${esc(r)}" ${i===0?"checked":""}> ${esc(r)}</label>`).join("")}</div>
+    <label>Contanos más (opcional)<textarea id="repTxt" rows="3" maxlength="500" placeholder="Ej.: ahora es 15% y solo los martes"></textarea></label><div class="acts"><button class="btn" type="submit" id="repSend">Enviar aviso</button></div></form>`);
+  $("repForm").onsubmit=async e=>{e.preventDefault();const b=$("repSend");b.disabled=true;b.textContent="Enviando…";
+    try{
+      const r=await fetch(SB_URL+"/rest/v1/reportes",{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json",Prefer:"return=minimal"},
+        body:JSON.stringify({deal:String(d.id).slice(0,40),com:String(d.com||"").slice(0,200),tit:String(d.tit||"").slice(0,300),motivo:sheet.querySelector("input[name=mot]:checked").value,detalle:$("repTxt").value.trim().slice(0,500),depto:String(st.depto).slice(0,40)})});
+      if(!r.ok)throw new Error(r.status);
+      closeSheet();toast("¡Gracias! Lo vamos a revisar");
+    }catch(err){b.disabled=false;b.textContent="Enviar aviso";toast("No se pudo enviar el aviso. Probá de nuevo más tarde.")}};
+}
+function openReports(){}
+/* Descuentos desde Supabase; si falla, queda la copia incluida arriba */
+(async()=>{
+  try{
+    const r=await fetch(SB_URL+"/rest/v1/descuentos?select=*&activo=eq.true",{headers:{apikey:SB_KEY}});
+    if(!r.ok)throw new Error(r.status);
+    const rows=await r.json();if(!Array.isArray(rows)||!rows.length)throw new Error("vacío");
+    BASE=rows.map(d=>{const o={...d,pct:d.pct==null?null:+d.pct,dias:d.dias||[],url:d.url||""};if(!o.src)delete o.src;if(!o.cond)delete o.cond;if(!o.deptos||!o.deptos.length)delete o.deptos;delete o.activo;delete o.actualizado;return o});
+    const last=rows.map(d=>d.actualizado).filter(Boolean).sort().pop();
+    if(last)REV=new Date(last).toLocaleDateString("es-UY",{day:"numeric",month:"long",year:"numeric"});
+    renderAll();
+  }catch(e){}
+})();
+
+/* ---------- inicio ---------- */
+renderAll();
+if(!LS.get("rebaja_onb",0))openWelcome(1);
+</script>
+</body>
+</html>
