@@ -95,6 +95,7 @@ h1 em{font-style:normal;color:var(--sun)}
 .more{margin-top:10px;width:100%;border:2px dashed var(--line);background:none;border-radius:16px;padding:12px;font-weight:700;cursor:pointer;color:var(--ink)}
 .callout{margin-top:14px;padding:14px 16px;border-radius:16px;background:var(--soft);font-size:.88rem;display:grid;gap:8px}
 .callout b{font-size:.95rem}
+.condlink{display:inline-block;font-size:.88rem;text-decoration:none}
 .linkbtn{border:0;background:none;padding:0;color:var(--hot);font-weight:700;cursor:pointer;text-align:left}
 
 /* tarjeta de descuento */
@@ -272,7 +273,7 @@ dialog::backdrop{background:rgba(15,13,26,.6)}
 
 <script>
 const DIAS=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
-const CATS=["Todas","Supermercados","Gastronomía","Delivery","Combustible","Farmacias","Hogar y tecnología","Indumentaria","Compras online","Viajes y hotelería","Entretenimiento","Autos y gomerías","Ferretería y construcción","Ópticas","Mascotas","Salud y gimnasios","Educación y librerías","Transporte","Puntos y cashback","Impuestos"];
+const CATS=["Todas","Supermercados","Gastronomía","Cafeterías","Heladerías","Pastelerías y panaderías","Comida rápida","Delivery","Combustible","Farmacias","Hogar y tecnología","Decoración","Viveros y jardín","Indumentaria","Outlets","Compras online","Viajes y hotelería","Cines","Entretenimiento","Autos y gomerías","Ferretería y construcción","Ópticas","Mascotas","Salud y gimnasios","Educación y librerías","Transporte","Puntos y cashback","Impuestos"];
 const TIPOS=["Todos","Promo del comercio","Tarjeta / banco","App","Tienda online","Evento de ofertas","Programa de beneficios"];
 const DEPTOS=["Artigas","Canelones","Cerro Largo","Colonia","Durazno","Flores","Florida","Lavalleja","Maldonado","Montevideo","Paysandú","Río Negro","Rivera","Rocha","Salto","San José","Soriano","Tacuarembó","Treinta y Tres"];
 const MEDIOS=["Cualquier medio","Cualquier medio de pago","BROU","Itaú","Santander","Scotiabank","BBVA","HSBC","OCA","Creditel","Italmundo","Passcard","Prex","Mi Dinero","Mercado Pago","Débito (cualquier banco)","Tarjeta extranjera"];
@@ -451,7 +452,7 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* ---------- colores y distintivos ---------- */
-const COL={"Supermercados":["#f2542d","#fff"],"Gastronomía":["#e23a8a","#fff"],"Delivery":["#ff9f1c","#1a1530"],"Combustible":["#2b59ff","#fff"],"Farmacias":["#00a88f","#fff"],"Hogar y tecnología":["#7a3cff","#fff"],"Indumentaria":["#ff6fb5","#1a1530"],"Compras online":["#ffd23f","#1a1530"],"Viajes y hotelería":["#00b4d8","#1a1530"],"Entretenimiento":["#8ac926","#1a1530"],"Puntos y cashback":["#3d348b","#fff"],"Impuestos":["#577590","#fff"],"Autos y gomerías":["#1d3557","#fff"],"Ferretería y construcción":["#bc6c25","#fff"],"Ópticas":["#06d6a0","#1a1530"],"Mascotas":["#c77dff","#1a1530"],"Salud y gimnasios":["#118ab2","#fff"],"Educación y librerías":["#e9c46a","#1a1530"],"Transporte":["#264653","#fff"]};
+const COL={"Cafeterías":["#8d5a3b","#fff"],"Heladerías":["#ff8fab","#1a1530"],"Pastelerías y panaderías":["#e9a23b","#1a1530"],"Comida rápida":["#d62828","#fff"],"Cines":["#2d2a5a","#fff"],"Decoración":["#a26769","#fff"],"Viveros y jardín":["#2a9d4b","#fff"],"Outlets":["#0f8b8d","#fff"],"Supermercados":["#f2542d","#fff"],"Gastronomía":["#e23a8a","#fff"],"Delivery":["#ff9f1c","#1a1530"],"Combustible":["#2b59ff","#fff"],"Farmacias":["#00a88f","#fff"],"Hogar y tecnología":["#7a3cff","#fff"],"Indumentaria":["#ff6fb5","#1a1530"],"Compras online":["#ffd23f","#1a1530"],"Viajes y hotelería":["#00b4d8","#1a1530"],"Entretenimiento":["#8ac926","#1a1530"],"Puntos y cashback":["#3d348b","#fff"],"Impuestos":["#577590","#fff"],"Autos y gomerías":["#1d3557","#fff"],"Ferretería y construcción":["#bc6c25","#fff"],"Ópticas":["#06d6a0","#1a1530"],"Mascotas":["#c77dff","#1a1530"],"Salud y gimnasios":["#118ab2","#fff"],"Educación y librerías":["#e9c46a","#1a1530"],"Transporte":["#264653","#fff"]};
 const PAL=Object.values(COL);
 const cv=cat=>{const c=COL[cat]||["#1a1530","#fff"];return `--c:${c[0]};--ci:${c[1]}`};
 const hv=name=>{let h=0;for(const ch of name)h=(h*31+ch.charCodeAt(0))>>>0;const c=PAL[h%PAL.length];return `--c:${c[0]};--ci:${c[1]}`};
@@ -637,6 +638,18 @@ document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>setT
 function renderAll(){renderPills();({Hoy:renderHoy,Explorar:renderExplorar,Guardados:renderGuardados,Ajustes:renderAjustes})[st.tab]()}
 document.querySelector("main").addEventListener("click",e=>{const d=e.target.closest("[data-deal]");if(d)openDeal(d.dataset.deal)});
 
+/* ---------- enlaces: tienda primero, banco después ---------- */
+const GENERIC_COM=/^(cualquier|comercios|supermercados adheridos|restaurantes adheridos|cafeterías adheridas|locales de|cines del interior|hoteles|estaciones|tiendas online|entretenimiento)/i;
+function isGenericCom(c){return GENERIC_COM.test(String(c||"").trim())}
+function goTarget(d){
+  if(d.web)return{u:d.web,t:/google\.[a-z.]+\/maps/.test(d.web)?"Ver en el mapa ↗":"Ir a la web de "+d.com+" ↗"};
+  if(!isGenericCom(d.com)&&!d.mio)return{u:"https://www.google.com/search?q="+encodeURIComponent(d.com+" Uruguay"),t:"Buscar "+d.com+" ↗"};
+  if(d.url)return{u:d.url,t:"Ver comercios adheridos ↗"};
+  return null;
+}
+function goBtn(d){const g=goTarget(d);return g?`<a class="btn dark" href="${esc(g.u)}" target="_blank" rel="noopener">${esc(g.t)}</a>`:""}
+function condLink(d){const g=goTarget(d);if(!d.url||(g&&g.u===d.url))return "";return `<a class="linkbtn condlink" href="${esc(d.url)}" target="_blank" rel="noopener">Ver condiciones del beneficio ↗</a>`}
+
 /* ---------- hojas ---------- */
 const dlg=$("dlg"),sheet=$("sheet");
 function openSheet(html){sheet.innerHTML=`<button type="button" class="x" data-close aria-label="Cerrar">×</button>`+html;if(!dlg.open)dlg.showModal();sheet.scrollTop=0}
@@ -653,7 +666,8 @@ function openDeal(id){
     <dl class="facts"><dt>Cuándo</dt><dd>${esc(daysTxt(d))}${d.hasta?` · hasta el ${fechaCorta(d.hasta)}`:""}</dd><dt>Dónde</dt><dd>${esc(w.t)}</dd><dt>Cómo pagar</dt><dd>${esc(d.medio)}${d.ent&&d.ent!==d.medio?` · ${esc(d.ent)}`:""}</dd><dt>Rubro</dt><dd>${esc(d.cat)}</dd>${d.src?`<dt>Fuente</dt><dd>${esc(d.src)}</dd>`:""}</dl>
     ${d.cond?`<p class="cond">${esc(d.cond)}</p>`:""}
     ${d.pct?`<div class="calc"><label for="calcIn">Si gastás $</label><input id="calcIn" type="number" inputmode="numeric" min="0" placeholder="2000"><span>ahorrás</span><output id="calcOut">—</output></div><small style="color:var(--muted)">Cálculo aproximado: revisá el tope en las condiciones.</small>`:""}
-    <div class="acts">${d.url?`<a class="btn dark" href="${esc(d.url)}" target="_blank" rel="noopener">Ver en la web ↗</a>`:""}${d.mio?"":`<button type="button" class="btn" id="shareBtn">Compartir</button>`}<button type="button" class="btn ghost" id="favBtn">${favs.has(d.id)?"★ Guardado":"☆ Guardar"}</button>${d.mio?`<button type="button" class="btn ghost" id="delBtn">Eliminar</button>`:`<button type="button" class="btn ghost" id="repBtn">Reportar un error</button>`}</div>
+    <div class="acts">${goBtn(d)}${d.mio?"":`<button type="button" class="btn" id="shareBtn">Compartir</button>`}<button type="button" class="btn ghost" id="favBtn">${favs.has(d.id)?"★ Guardado":"☆ Guardar"}</button>${d.mio?`<button type="button" class="btn ghost" id="delBtn">Eliminar</button>`:`<button type="button" class="btn ghost" id="repBtn">Reportar un error</button>`}</div>
+    ${condLink(d)}
     ${!st.ex.com||st.ex.com!==d.com?`<button type="button" class="linkbtn" id="moreCom">Ver todos los descuentos de ${esc(d.com)} →</button>`:""}`);
   const ci=$("calcIn");if(ci)ci.addEventListener("input",()=>{const v=+ci.value;$("calcOut").textContent=v>0?"$"+Math.round(v*d.pct/100).toLocaleString("es-UY"):"—"});
   $("favBtn").onclick=()=>{favs.has(d.id)?favs.delete(d.id):favs.add(d.id);LS.set("rebaja_favs",[...favs]);$("favBtn").textContent=favs.has(d.id)?"★ Guardado":"☆ Guardar";toast(favs.has(d.id)?"Guardado en tus favoritos":"Quitado de favoritos")};
