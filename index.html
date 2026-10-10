@@ -12,11 +12,11 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Rebaja.uy">
+<meta name="apple-mobile-web-app-title" content="RebajaUY">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Rebaja.uy">
-<meta property="og:title" content="Rebaja.uy · Descuentos de hoy en Uruguay">
+<meta property="og:site_name" content="RebajaUY">
+<meta property="og:title" content="RebajaUY · Descuentos de hoy en Uruguay">
 <meta property="og:description" content="Descuentos de bancos, tarjetas y comercios, día por día y en los 19 departamentos. Gratis.">
 <meta property="og:url" content="https://rebajauy.com/">
 <meta property="og:image" content="https://rebajauy.com/og.png">
@@ -24,10 +24,10 @@
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="es_UY">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Rebaja.uy · Descuentos de hoy en Uruguay">
+<meta name="twitter:title" content="RebajaUY · Descuentos de hoy en Uruguay">
 <meta name="twitter:description" content="Descuentos de bancos, tarjetas y comercios, día por día y en los 19 departamentos.">
 <meta name="twitter:image" content="https://rebajauy.com/og.png">
-<title>Rebaja Uruguay</title>
+<title>RebajaUY · Descuentos de hoy en Uruguay</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
 <style>
@@ -243,7 +243,7 @@ dialog::backdrop{background:rgba(15,13,26,.6)}
 
 <header class="hero">
   <div class="hero-in">
-    <h1><span class="pc">%</span><span>Rebaja<em>.uy</em></span></h1>
+    <h1><span class="pc">%</span><span>Rebaja<em>UY</em></span></h1>
     <div class="pills">
       <button class="pill loc" id="pLoc" type="button"></button>
       <button class="pill" id="pCards" type="button"></button>
@@ -780,9 +780,9 @@ function openReports(){}
 async function shareDeal(d){
   const url=location.origin+location.pathname+"?d="+encodeURIComponent(d.id);
   const pct=d.pct!=null&&d.pct!==""?d.pct+"% · ":"";
-  const text=`${pct}${d.com}: ${d.tit}. ${daysTxt(d)}${d.hasta?`, hasta el ${fechaCorta(d.hasta)}`:""}. Lo vi en Rebaja.uy`;
+  const text=`${pct}${d.com}: ${d.tit}. ${daysTxt(d)}${d.hasta?`, hasta el ${fechaCorta(d.hasta)}`:""}. Lo vi en RebajaUY`;
   track("compartir",d.id);
-  if(navigator.share){try{await navigator.share({title:"Rebaja.uy",text,url});return}catch(e){if(e&&e.name==="AbortError")return}}
+  if(navigator.share){try{await navigator.share({title:"RebajaUY",text,url});return}catch(e){if(e&&e.name==="AbortError")return}}
   window.open("https://wa.me/?text="+encodeURIComponent(text+"\n"+url),"_blank","noopener");
 }
 let deep=null;try{deep=new URLSearchParams(location.search).get("d")}catch(e){}
@@ -819,7 +819,7 @@ function installBar(){
   if(isApp()||instHidden())return "";
   const p=plat();if(p==="firefox"&&!instPrompt)return "";
   const movil=/^(ios|ios-otro|android)$/.test(p);
-  return `<div class="instbar"><img class="ic" src="icon-192.png" alt=""><div class="tx"><b>Tené Rebaja.uy como app</b>${movil?"Gratis, en tu pantalla de inicio.":"Abrila con un clic, en su propia ventana."}</div><button type="button" class="btn" data-open="install">Instalar</button><button type="button" class="nx" data-instx aria-label="Ahora no">×</button></div>`;
+  return `<div class="instbar"><img class="ic" src="icon-192.png" alt=""><div class="tx"><b>Tené RebajaUY como app</b>${movil?"Gratis, en tu pantalla de inicio.":"Abrila con un clic, en su propia ventana."}</div><button type="button" class="btn" data-open="install">Instalar</button><button type="button" class="nx" data-instx aria-label="Ahora no">×</button></div>`;
 }
 const SH=`<svg viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>`;
 const DOTS=`<svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>`;
@@ -827,17 +827,17 @@ async function openInstall(){
   if(isApp()){toast("Ya la estás usando como app");return}
   if(instPrompt){
     const ev=instPrompt;instPrompt=null;
-    try{ev.prompt();const r=await ev.userChoice;if(r&&r.outcome==="accepted")toast("¡Listo! Rebaja.uy quedó instalada")}catch(e){}
+    try{ev.prompt();const r=await ev.userChoice;if(r&&r.outcome==="accepted")toast("¡Listo! RebajaUY quedó instalada")}catch(e){}
     renderAll();return;
   }
   const p=plat();let pasos,nota="";
-  if(p==="ios")pasos=[`Tocá el botón <span class="k">${SH} Compartir</span> abajo de la pantalla (en iPad, arriba a la derecha). Si no lo ves, tocá primero <span class="k">···</span>.`,`Deslizá y elegí <span class="k">Agregar a inicio</span>.`,`Tocá <span class="k">Agregar</span>. El ícono de Rebaja.uy aparece junto a tus apps.`];
+  if(p==="ios")pasos=[`Tocá el botón <span class="k">${SH} Compartir</span> abajo de la pantalla (en iPad, arriba a la derecha). Si no lo ves, tocá primero <span class="k">···</span>.`,`Deslizá y elegí <span class="k">Agregar a inicio</span>.`,`Tocá <span class="k">Agregar</span>. El ícono de RebajaUY aparece junto a tus apps.`];
   else if(p==="ios-otro")pasos=[`Tocá el botón <span class="k">${SH} Compartir</span> del navegador.`,`Elegí <span class="k">Agregar a inicio</span>.`,`Tocá <span class="k">Agregar</span>.`],nota="Si no aparece la opción, abrí rebajauy.com en Safari y hacelo desde ahí.";
   else if(p==="android")pasos=[`Tocá el menú <span class="k">${DOTS}</span> arriba a la derecha.`,`Elegí <span class="k">Instalar app</span> o <span class="k">Agregar a la pantalla principal</span>.`,`Confirmá con <span class="k">Instalar</span>.`];
   else if(p==="mac-safari")pasos=[`En la barra de arriba, abrí el menú <span class="k">Archivo</span>.`,`Elegí <span class="k">Agregar al Dock</span>.`,`Tocá <span class="k">Agregar</span>. La vas a encontrar en el Dock y en Aplicaciones.`];
   else if(p==="firefox")pasos=[`Firefox no instala apps web en la computadora.`,`Guardala en favoritos con <span class="k">Ctrl + D</span> (o <span class="k">⌘ + D</span> en Mac).`],nota="Para tenerla como app, abrila en Chrome o Edge.";
   else pasos=[`Buscá el ícono de instalar <span class="k">⊕</span> a la derecha de la barra de direcciones.`,`O abrí el menú <span class="k">${DOTS}</span> → <span class="k">Transmitir, guardar y compartir</span> → <span class="k">Instalar página como app</span>.`,`Confirmá con <span class="k">Instalar</span>.`];
-  openSheet(`<h2>Instalar Rebaja.uy</h2><p class="lead">Es gratis, no ocupa casi espacio y se actualiza sola.</p><ol class="isteps">${pasos.map(x=>`<li>${x}</li>`).join("")}</ol>${nota?`<p class="lead">${nota}</p>`:""}<button type="button" class="btn ghost" data-close>Entendido</button>`);
+  openSheet(`<h2>Instalar RebajaUY</h2><p class="lead">Es gratis, no ocupa casi espacio y se actualiza sola.</p><ol class="isteps">${pasos.map(x=>`<li>${x}</li>`).join("")}</ol>${nota?`<p class="lead">${nota}</p>`:""}<button type="button" class="btn ghost" data-close>Entendido</button>`);
 }
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();instPrompt=e;if(!dlg.open)renderAll()});
 window.addEventListener("appinstalled",()=>{instPrompt=null;if(!dlg.open)renderAll()});

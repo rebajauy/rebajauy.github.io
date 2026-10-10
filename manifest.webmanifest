@@ -1,7 +1,7 @@
 {
   "id": "./",
-  "name": "Rebaja.uy · Descuentos en Uruguay",
-  "short_name": "Rebaja.uy",
+  "name": "RebajaUY · Descuentos en Uruguay",
+  "short_name": "RebajaUY",
   "description": "Descuentos de bancos, tarjetas y comercios de Uruguay, día por día y por departamento.",
   "lang": "es-UY",
   "start_url": "./?app=1",
