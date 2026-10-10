@@ -237,6 +237,10 @@ dialog::backdrop{background:rgba(15,13,26,.6)}
 .sx.l button{left:-10px}.sx.r button{right:-10px}
 .sx button:hover{background:var(--soft)}
 @media (hover:hover) and (pointer:fine){.sx{display:block}.sx[hidden]{display:none}}
+.redic{flex:none!important;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:1rem}
+.callout.wa{border-left:4px solid #25d366}
+a.row-set>span:not(.redic):not(.go){flex:1 1 auto}
+a.row-set>.go{flex:none}
 </style>
 </head>
 <body>
@@ -539,6 +543,7 @@ function renderHoy(){
     const top=others.sort(byScore).slice(0,3);
     h+=`<div class="sec"><h2>Con otras tarjetas</h2><span>${others.length} más este día</span></div><div class="list">${top.map(d=>dealCard(d,day)).join("")}</div>`;
   }
+  h+=`<div class="callout wa"><b>📲 Recibí los descuentos cada mañana</b><span>Seguí el canal de RebajaUY en WhatsApp: un mensaje por día, sin grupos ni spam.</span><a class="linkbtn" href="https://whatsapp.com/channel/0029Vb99ezSDTkJwi6cvGT2E" target="_blank" rel="noopener" style="text-decoration:none">Seguir en WhatsApp →</a></div>`;
   if(st.depto==="todos")h+=`<div class="callout"><b>¿Dónde estás?</b><span>Elegí tu departamento para ver también los descuentos de tu zona, como los de frontera o del interior.</span><button type="button" class="linkbtn" data-open="depto">Elegir departamento →</button></div>`;
   $("vHoy").innerHTML=installBar()+h;
 }
@@ -622,7 +627,7 @@ function renderAjustes(){
     row("help","Cómo funciona","Qué significa cada etiqueta")+
     row("welcome","Ver la bienvenida otra vez","Volvé a elegir departamento y tarjetas")+
     (reportsCount!=null?row("reports","Reportes recibidos",`${reportsCount} ${reportsCount===1?"aviso":"avisos"} de usuarios (solo lo ves vos)`):"")+
-    `</div><p class="note">Datos revisados el <b>${REV}</b>. Se actualizan todas las semanas. Los descuentos tienen topes, días y stock: confirmá en el comercio o en tu banco antes de pagar.</p>`;
+    `</div>`+redesCard()+`<p class="note">Datos revisados el <b>${REV}</b>. Se actualizan todas las semanas. Los descuentos tienen topes, días y stock: confirmá en el comercio o en tu banco antes de pagar.</p>`;
   $("vAjustes").innerHTML=h;
 }
 document.addEventListener("click",e=>{
@@ -878,6 +883,10 @@ document.addEventListener("wheel",e=>{const el=e.target.closest&&e.target.closes
   const max=el.scrollWidth-el.clientWidth;if((e.deltaY<0&&el.scrollLeft<=0)||(e.deltaY>0&&el.scrollLeft>=max))return;
   e.preventDefault();el.scrollLeft+=e.deltaY},{passive:false});
 window.addEventListener("resize",()=>document.querySelectorAll(".days,.chips").forEach(rowArrows));
+
+/* ---------- redes de RebajaUY ---------- */
+const REDES=[["WhatsApp","Canal de WhatsApp","Los mejores descuentos cada mañana","https://whatsapp.com/channel/0029Vb99ezSDTkJwi6cvGT2E","#25d366"],["Instagram","Instagram","@rebajauy","https://www.instagram.com/rebajauy/","#e1306c"],["Facebook","Facebook","facebook.com/rebajauy","https://www.facebook.com/rebajauy","#1877f2"]];
+function redesCard(){return `<h3 class="greet" style="font-size:1.05rem;margin:22px 0 8px">Seguinos</h3><div class="card">`+REDES.map(r=>`<a class="row-set" href="${r[3]}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><span class="redic" style="background:${r[4]}">${r[0][0]}</span><span><b>${r[1]}</b><small>${r[2]}</small></span><span class="go">↗</span></a>`).join("")+`</div>`}
 
 /* ---------- inicio ---------- */
 renderAll();
