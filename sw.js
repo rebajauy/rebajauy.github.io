@@ -1,6 +1,6 @@
 // RebajaUY: permite instalarla como app y abrirla rápido, incluso sin señal.
 // Siempre intenta traer lo más nuevo de internet; si no hay conexión, usa la última copia guardada.
-const CACHE = "rebaja-v4";
+const CACHE = "rebaja-v5";
 const BASE = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
@@ -29,13 +29,13 @@ self.addEventListener("fetch", e => {
       .then(res => {
         if (res && (res.ok || res.type === "opaque")) {
           const copia = res.clone();
-          const clave = req.mode === "navigate" ? "./" : req;
+          const clave = req;
           caches.open(CACHE).then(c => c.put(clave, copia));
         }
         return res;
       })
       .catch(() =>
-        caches.match(req.mode === "navigate" ? "./" : req, { ignoreSearch: req.mode === "navigate" })
+        caches.match(req, { ignoreSearch: req.mode === "navigate" })
           .then(r => r || (req.mode === "navigate" ? caches.match("./") : Response.error()))
       )
   );

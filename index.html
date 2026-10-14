@@ -93,6 +93,7 @@ h1 em{font-style:normal;color:var(--sun)}
 .sec h2{margin:0;font-family:var(--display);font-size:.98rem;font-weight:600}
 .sec span{font-size:.8rem;color:var(--muted)}
 .list{display:grid;gap:10px}
+.deplinks{margin:8px 0 24px;font-size:.78rem;color:var(--muted);line-height:1.9}.deplinks a{color:inherit}.deplinks a[aria-current]{color:var(--ink);font-weight:700}
 .more{margin-top:10px;width:100%;border:2px dashed var(--line);background:none;border-radius:16px;padding:12px;font-weight:700;cursor:pointer;color:var(--ink)}
 .callout{margin-top:14px;padding:14px 16px;border-radius:16px;background:var(--soft);font-size:.88rem;display:grid;gap:8px}
 .callout b{font-size:.95rem}
@@ -262,6 +263,7 @@ a.row-set>.go{flex:none}
   <section class="view" id="vExplorar" aria-label="Explorar" hidden></section>
   <section class="view" id="vGuardados" aria-label="Guardados" hidden></section>
   <section class="view" id="vAjustes" aria-label="Ajustes" hidden></section>
+  <nav class="deplinks" aria-label="Descuentos por departamento"><b>Descuentos por departamento:</b> <a href="/">Todo Uruguay</a> · <a href="/artigas">Artigas</a> · <a href="/canelones">Canelones</a> · <a href="/cerro-largo">Cerro Largo</a> · <a href="/colonia">Colonia</a> · <a href="/durazno">Durazno</a> · <a href="/flores">Flores</a> · <a href="/florida">Florida</a> · <a href="/lavalleja">Lavalleja</a> · <a href="/maldonado">Maldonado</a> · <a href="/montevideo">Montevideo</a> · <a href="/paysandu">Paysandú</a> · <a href="/rio-negro">Río Negro</a> · <a href="/rivera">Rivera</a> · <a href="/rocha">Rocha</a> · <a href="/salto">Salto</a> · <a href="/san-jose">San José</a> · <a href="/soriano">Soriano</a> · <a href="/tacuarembo">Tacuarembó</a> · <a href="/treinta-y-tres">Treinta y Tres</a></nav>
 </main>
 
 <nav class="tabs" aria-label="Secciones">
@@ -277,6 +279,7 @@ a.row-set>.go{flex:none}
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script>
+const PAGE_DEPTO=null;
 const DIAS=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
 const CATS=["Todas","Supermercados","Gastronomía","Cafeterías","Heladerías","Pastelerías y panaderías","Comida rápida","Delivery","Combustible","Farmacias","Hogar y tecnología","Decoración","Viveros y jardín","Indumentaria","Outlets","Compras online","Viajes y hotelería","Cines","Entretenimiento","Autos y gomerías","Ferretería y construcción","Ópticas","Mascotas","Salud y gimnasios","Educación y librerías","Transporte","Puntos y cashback","Impuestos"];
 CATS.splice(1,CATS.length-1,...CATS.slice(1).sort((a,b)=>a.localeCompare(b,"es")));
@@ -448,7 +451,7 @@ let mine=LS.get("rebaja_mine",[]).map(d=>({...d,com:d.com||d.ent,deptos:d.deptos
 let favs=new Set(LS.get("rebaja_favs",[]));
 let myCards=new Set(LS.get("rebaja_cards",[]));
 let logos=LS.get("rebaja_logos",{});
-const st={tab:"Hoy",depto:LS.get("rebaja_depto","todos"),off:0,hoyCat:"Todas",showAll:false,
+const st={tab:"Hoy",depto:PAGE_DEPTO||LS.get("rebaja_depto","todos"),off:0,hoyCat:"Todas",showAll:false,
   ex:{q:"",cat:"Todas",com:null,tipo:"Todos",medio:"Cualquier medio",dia:"todos",zona:false,ok:false,mias:true}};
 if(st.depto!=="todos"&&!DEPTOS.includes(st.depto))st.depto="todos";
 const hoy=new Date().getDay();
@@ -538,12 +541,14 @@ function renderHoy(){
     <div class="sec"><h2>${st.hoyCat==="Todas"?"Lo mejor del día":esc(st.hoyCat)}</h2><span>De mayor a menor ahorro</span></div>`;
   h+=shown.length?`<div class="list">${shown.map(d=>dealCard(d,day)).join("")}</div>`:`<div class="empty">No hay descuentos para este día con tus filtros.<br>Probá otro día o mirá en Explorar.</div>`;
   if(list.length>shown.length)h+=`<button type="button" class="more" id="moreBtn">Ver los ${list.length} descuentos</button>`;
+  if(list.length)h+=`<button type="button" class="more" id="shareDay">📲 Compartir estos descuentos por WhatsApp</button>`;
   if(!myCards.size)h+=`<div class="callout"><b>Mostrá solo lo que podés usar</b><span>Contanos qué tarjetas y apps tenés y ordenamos el día para vos. No pedimos números de tarjeta.</span><button type="button" class="linkbtn" data-open="cards">Elegir mis tarjetas →</button></div>`;
   else if(others.length){
     const top=others.sort(byScore).slice(0,3);
     h+=`<div class="sec"><h2>Con otras tarjetas</h2><span>${others.length} más este día</span></div><div class="list">${top.map(d=>dealCard(d,day)).join("")}</div>`;
   }
   h+=`<div class="callout wa"><b>📲 Recibí los descuentos cada mañana</b><span>Seguí el canal de RebajaUY en WhatsApp: un mensaje por día, sin grupos ni spam.</span><a class="linkbtn" href="https://whatsapp.com/channel/0029Vb99ezSDTkJwi6cvGT2E" target="_blank" rel="noopener" style="text-decoration:none">Seguir en WhatsApp →</a></div>`;
+  if(st.depto!=="todos")h+=`<div class="callout"><b>¿Tenés un comercio en ${esc(st.depto)}?</b><span>Sumá tu descuento gratis y que lo vea la gente de tu zona.</span><button type="button" class="linkbtn" data-open="comercio">Sumar mi comercio →</button></div>`;
   if(st.depto==="todos")h+=`<div class="callout"><b>¿Dónde estás?</b><span>Elegí tu departamento para ver también los descuentos de tu zona, como los de frontera o del interior.</span><button type="button" class="linkbtn" data-open="depto">Elegir departamento →</button></div>`;
   $("vHoy").innerHTML=installBar()+h;
 }
@@ -551,6 +556,7 @@ $("vHoy").addEventListener("click",e=>{
   const dy=e.target.closest("[data-off]");if(dy){st.off=+dy.dataset.off;st.showAll=false;renderHoy();return}
   const c=e.target.closest("[data-hcat]");if(c){st.hoyCat=c.dataset.hcat;st.showAll=false;renderHoy();return}
   if(e.target.closest("#moreBtn")){st.showAll=true;renderHoy();return}
+  if(e.target.closest("#shareDay")){shareDay();return}
 });
 
 /* ---------- pestaña Explorar ---------- */
@@ -622,6 +628,7 @@ function renderAjustes(){
     row("depto","Mi departamento",st.depto==="todos"?"Todo Uruguay":esc(st.depto))+
     row("cards","Mis tarjetas y apps",myCards.size?esc([...myCards].join(", ")):"Ninguna elegida: ves todos los descuentos")+
     row("add","Agregar un descuento","Cargá una promo que conozcas")+
+    row("comercio","¿Tenés un comercio?","Sumá tu descuento gratis a RebajaUY")+
     row("logos","Logos","Subí los logos de los comercios")+
     (isApp()?"":row("install","Instalar como app","Tenela en tu pantalla de inicio o escritorio"))+
     row("help","Cómo funciona","Qué significa cada etiqueta")+
@@ -632,7 +639,7 @@ function renderAjustes(){
 }
 document.addEventListener("click",e=>{
   const o=e.target.closest("[data-open]");if(!o)return;
-  ({depto:openDepto,cards:openCards,add:openAdd,logos:openLogos,help:openHelp,welcome:()=>openWelcome(1),reports:openReports,install:openInstall})[o.dataset.open]?.();
+  ({depto:openDepto,cards:openCards,add:openAdd,logos:openLogos,help:openHelp,welcome:()=>openWelcome(1),comercio:openComercio,reports:openReports,install:openInstall})[o.dataset.open]?.();
 });
 
 /* ---------- navegación ---------- */
@@ -710,7 +717,7 @@ function openFilters(){
 }
 function openAdd(){
   const o=a=>a.map(v=>`<option>${esc(v)}</option>`).join("");
-  openSheet(`<h2>Agregar un descuento</h2><p class="lead">Queda guardado solo en este dispositivo.</p><form class="form" id="addForm">
+  openSheet(`<h2>Agregar un descuento</h2><p class="lead">Se guarda en este dispositivo y, si querés, nos lo mandás para revisarlo y sumarlo para todos.</p><form class="form" id="addForm">
     <label>¿Qué descuento es?<input id="aTit" required placeholder="20% en carnes los martes"></label>
     <div class="grid2"><label>Comercio<input id="aCom" required list="comList" placeholder="Carnicería Don José"></label><label>% de descuento<input id="aPct" type="number" min="0" max="100" placeholder="20"></label></div>
     <datalist id="comList">${Object.keys(COMS).map(c=>`<option value="${esc(c)}">`).join("")}</datalist>
@@ -719,12 +726,30 @@ function openAdd(){
     <div><span style="font-size:.8rem;font-weight:700;color:var(--muted)">Días (si no marcás ninguno, vale todos los días)</span><div class="dchk">${DIAS_L.map((d,i)=>`<label><input type="checkbox" value="${i}">${d.slice(0,3)}</label>`).join("")}</div></div>
     <label>Condiciones<textarea id="aCond" rows="2" placeholder="Tope $500, solo con débito"></textarea></label>
     <label>Enlace (opcional)<input id="aUrl" type="url" placeholder="https://"></label>
+    <div class="radio"><label><input type="checkbox" id="aSend" checked> Enviárselo a RebajaUY para que lo vean todos</label></div>
     <div class="acts"><button class="btn" type="submit">Guardar descuento</button></div></form>`);
   if(st.depto!=="todos")$("aDep").value=st.depto;
-  $("addForm").onsubmit=e=>{e.preventDefault();const p=$("aPct").value;
+  $("addForm").onsubmit=e=>{e.preventDefault();const p=$("aPct").value,send=$("aSend").checked;
     mine.unshift({id:"u"+Date.now(),com:$("aCom").value.trim(),ent:"Agregado por vos",tit:$("aTit").value.trim(),pct:p===""?null:+p,cat:$("aCat").value,medio:$("aMedio").value,tipo:"Promo del comercio",
       deptos:$("aDep").value==="todos"?[]:[$("aDep").value],dias:[...sheet.querySelectorAll(".dchk input:checked")].map(i=>+i.value),cond:$("aCond").value.trim(),url:$("aUrl").value.trim(),mio:true});
-    LS.set("rebaja_mine",mine);closeSheet();toast("Descuento agregado")};
+    LS.set("rebaja_mine",mine);
+    if(send){const n=mine[0];try{sbPost("reportes",{deal:"nuevo",com:n.com.slice(0,200),tit:n.tit.slice(0,300),motivo:"Descuento nuevo sugerido",detalle:[n.pct!=null?n.pct+"%":"",n.cat,n.medio,n.dias.length?"días "+n.dias.map(i=>DIAS[i]).join(", "):"todos los días",n.cond,n.url].filter(Boolean).join(" | ").slice(0,500),depto:String(n.deptos[0]||"todos").slice(0,40)}).catch(()=>{})}catch(e){}}
+    closeSheet();toast(send?"Descuento agregado y enviado. ¡Gracias!":"Descuento agregado")};
+}
+function openComercio(){
+  const o=a=>a.map(v=>`<option>${esc(v)}</option>`).join("");
+  openSheet(`<h2>Sumá tu comercio</h2><p class="lead">Es gratis. Contanos qué descuento ofrecés y lo publicamos después de confirmarlo con vos.</p><form class="form" id="comForm">
+    <label>Nombre del comercio<input id="cNom" required maxlength="120" placeholder="Panadería La Esquina"></label>
+    <div class="grid2"><label>Rubro<select id="cCat">${o(CATS.slice(1))}</select></label><label>Departamento<select id="cDep">${o(DEPTOS)}</select></label></div>
+    <label>¿Qué descuento ofrecés?<textarea id="cDesc" required rows="3" maxlength="300" placeholder="10% pagando en efectivo de lunes a jueves"></textarea></label>
+    <label>Tu WhatsApp o email<input id="cCon" required maxlength="120" placeholder="099 123 456"></label>
+    <p class="lead" style="font-size:.8rem;margin:0">Usamos este contacto solo para confirmar el descuento.</p>
+    <div class="acts"><button class="btn" type="submit" id="cSend">Enviar</button></div></form>`);
+  if(st.depto!=="todos")$("cDep").value=st.depto;
+  $("comForm").onsubmit=async e=>{e.preventDefault();const b=$("cSend");b.disabled=true;b.textContent="Enviando…";
+    try{const r=await sbPost("reportes",{deal:"comercio",com:$("cNom").value.trim().slice(0,200),tit:$("cDesc").value.trim().slice(0,300),motivo:"Comercio quiere sumarse",detalle:("Rubro: "+$("cCat").value+" | Contacto: "+$("cCon").value.trim()).slice(0,500),depto:$("cDep").value.slice(0,40)});
+      if(!r.ok)throw new Error(r.status);closeSheet();toast("¡Gracias! Te vamos a contactar");
+    }catch(err){b.disabled=false;b.textContent="Enviar";toast("No se pudo enviar. Probá de nuevo más tarde.")}};
 }
 function openHelp(){
   openSheet(`<h2>Cómo funciona</h2><dl class="facts">
@@ -788,6 +813,19 @@ async function shareDeal(d){
   const pct=d.pct!=null&&d.pct!==""?d.pct+"% · ":"";
   const text=`${pct}${d.com}: ${d.tit}. ${daysTxt(d)}${d.hasta?`, hasta el ${fechaCorta(d.hasta)}`:""}. Lo vi en RebajaUY`;
   track("compartir",d.id);
+  if(navigator.share){try{await navigator.share({title:"RebajaUY",text,url});return}catch(e){if(e&&e.name==="AbortError")return}}
+  window.open("https://wa.me/?text="+encodeURIComponent(text+"\n"+url),"_blank","noopener");
+}
+const SLUG=x=>x.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/ /g,"-");
+async function shareDay(){
+  const day=(hoy+st.off)%7;
+  const l=all().filter(d=>inZone(d)&&validOn(d,day)&&usable(d)&&(st.hoyCat==="Todas"||d.cat===st.hoyCat)).sort(byScore);
+  const top=l.slice(0,5).map(d=>`• ${d.pct!=null&&d.pct!==""?d.pct+"% · ":""}${d.com}: ${d.tit}`).join("\n");
+  const when=st.off===0?"hoy":st.off===1?"mañana":"el "+DIAS_L[day];
+  const place=st.depto==="todos"?"Uruguay":st.depto;
+  const url="https://rebajauy.com/"+(st.depto==="todos"?"":SLUG(st.depto))+"?utm_source=compartir";
+  const text=`🛍️ Descuentos para ${when} en ${place} (${l.length} en total):\n${top}\n\nMirá todos gratis en RebajaUY 👇`;
+  track("compartir","dia");
   if(navigator.share){try{await navigator.share({title:"RebajaUY",text,url});return}catch(e){if(e&&e.name==="AbortError")return}}
   window.open("https://wa.me/?text="+encodeURIComponent(text+"\n"+url),"_blank","noopener");
 }
@@ -890,7 +928,8 @@ function redesCard(){return `<h3 class="greet" style="font-size:1.05rem;margin:2
 
 /* ---------- inicio ---------- */
 renderAll();
-if(!LS.get("rebaja_onb",0)&&!deep)openWelcome(1);
+if(PAGE_DEPTO&&!LS.get("rebaja_depto",0))LS.set("rebaja_depto",PAGE_DEPTO);
+if(!LS.get("rebaja_onb",0)&&!deep)openWelcome(PAGE_DEPTO?2:1);
 tryDeep();
 </script>
 </body>
