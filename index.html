@@ -924,7 +924,7 @@ window.addEventListener("resize",()=>document.querySelectorAll(".days,.chips").f
 
 /* ---------- redes de RebajaUY ---------- */
 const REDES=[["WhatsApp","Canal de WhatsApp","Los mejores descuentos cada mañana","https://whatsapp.com/channel/0029Vb99ezSDTkJwi6cvGT2E","#25d366"],["Instagram","Instagram","@rebajauy","https://www.instagram.com/rebajauy/","#e1306c"],["Facebook","Facebook","facebook.com/rebajauy","https://www.facebook.com/rebajauy","#1877f2"]];
-function redesCard(){return `<h3 class="greet" style="font-size:1.05rem;margin:22px 0 8px">Seguinos</h3><div class="card">`+REDES.map(r=>`<a class="row-set" href="${r[3]}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><span class="redic" style="background:${r[4]}">${r[0][0]}</span><span><b>${r[1]}</b><small>${r[2]}</small></span><span class="go">↗</span></a>`).join("")+`</div>`}
+function redesCard(){return `<h3 class="greet" style="font-size:1.05rem;margin:22px 0 8px">Seguinos</h3><div class="card">`+REDES.map(r=>`<a class="row-set" href="${r[3]}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><span class="redic" style="background:${r[4]}">${r[0][0]}</span><span><b>${r[1]}</b><small>${r[2]}</small></span><span class="go">↗</span></a>`).join("")+`</div><p style="text-align:center;font-size:.8rem;margin:14px 0 4px"><a href="/privacidad.html" style="color:inherit;opacity:.7">Política de privacidad</a></p>`}
 
 /* ---------- inicio ---------- */
 renderAll();
